@@ -20,18 +20,47 @@ const activities=[
 const blocks=[
   ["#9,841,274","0x4fe…9a1","118 tx","now"],["#9,841,273","0xa08…cc2","94 tx","0.5s"],["#9,841,272","0x91b…3e8","131 tx","1.0s"],["#9,841,271","0x37d…42f","86 tx","1.5s"],["#9,841,270","0xef4…761","109 tx","2.0s"]
 ];
+const creatorLaunches=[
+  ["GHOST","$211K","LIVE","+74.8%"],["MINT","$1.8M peak","-98.7%","2d ago"],["DEAD","$420K peak","-99.4%","4d ago"],["BOZO","$91K peak","-97.2%","7d ago"],["ARC7","$680K peak","-99.1%","11d ago"],["ZAP","$54K peak","-96.8%","14d ago"],["FOLD","$310K peak","-99.8%","17d ago"],["ZERO","$76K peak","-100%","19d ago"]
+];
+const bundleWallets=[
+  ["0xA822…C611","4.82%","$10,170","Launch block"],["0x19B4…F882","4.11%","$8,672","Launch block"],["0xCC41…9A02","3.74%","$7,891","Launch block"],["0x831D…117C","3.20%","$6,752","+1 block"],["0xF294…20E1","2.97%","$6,267","+1 block"],["7 more wallets","12.36%","$26,080","≤ 4 blocks"]
+];
+const holders=[
+  ["1 · 0xA822…C611","4.82%","Likely bundle","No sells"],["2 · 0x19B4…F882","4.11%","Likely bundle","No sells"],["3 · 0xCC41…9A02","3.74%","Likely bundle","Sold 12%"],["4 · 0x71F2…A19C","3.51%","Creator","No sells"],["5 · 0x831D…117C","3.20%","Likely bundle","No sells"],["6–100 · Other wallets","43.12%","Mixed","—"]
+];
+const trades=[
+  ["BUY","$1,842","0xF28…81C","now"],["BUY","$420","0x30A…912","2s"],["SELL","$2,119","0xA18…0F2","4s"],["BUY","$718","0x98C…7DE","7s"],["BUY","$3,201","0x44B…11A","11s"],["SELL","$890","0x7D1…8C4","14s"]
+];
 
 const rowRoot=document.querySelector("#launch-rows");
 function renderLaunches(filter="all",query=""){
   const normalized=query.toLowerCase();
   const items=launches.filter(x=>(filter==="all"||x.tags.includes(filter))&&(`${x.symbol} ${x.name} ${x.label}`.toLowerCase().includes(normalized)));
   rowRoot.innerHTML=items.length?items.map(x=>`<tr data-token="${x.symbol}"><td><div class="token-cell"><span class="token-icon">${x.symbol.slice(0,2)}</span><div><strong>${x.symbol} · ${x.name}</strong><small>0x${Math.random().toString(16).slice(2,8)}…${Math.random().toString(16).slice(2,6)}</small></div></div></td><td class="mono">${x.age}</td><td class="mono">${x.cap}</td><td class="mono change ${x.change.startsWith("+")?"up":"down"}">${x.change}</td><td class="mono">${x.liq}</td><td><span class="record">${x.record}<small class="${x.dead.startsWith("0")?"":"death"}">${x.dead}</small></span></td><td class="mono">${x.bundle}</td><td><span class="risk-pill ${x.risk}">${x.label}</span></td><td class="row-open">›</td></tr>`).join(""):`<tr><td colspan="9" style="text-align:center;padding:38px;color:#7f8c93">No matching launches.</td></tr>`;
-  rowRoot.querySelectorAll("tr[data-token]").forEach(row=>row.addEventListener("click",()=>showToast(`${row.dataset.token} intelligence view is queued for the data integration phase.`)));
+  rowRoot.querySelectorAll("tr[data-token]").forEach(row=>row.addEventListener("click",()=>openToken(row.dataset.token)));
 }
 renderLaunches();
 document.querySelector("#farmer-list").innerHTML=farmers.map(x=>`<div class="farmer-row"><div class="wallet-id"><i class="identicon"></i><div><strong>${x.wallet}</strong><br><span>${x.launches}</span></div></div><span class="death">${x.dead}</span><span>${x.fees} fees</span><span class="risk-pill ${x.risk.toLowerCase()}">${x.risk.toUpperCase()}</span></div>`).join("");
 document.querySelector("#activity-list").innerHTML=activities.map(x=>`<div class="activity-item"><span class="activity-icon">${x.icon}</span><p>${x.text}</p><time>${x.time}</time></div>`).join("");
 document.querySelector("#block-list").innerHTML=blocks.map(x=>`<div class="block-row"><strong>${x[0]}</strong><span>Validator ${x[1]}</span><span>${x[2]}</span><span>${x[3]} ago</span></div>`).join("");
+const launchMarkup=creatorLaunches.map((x,i)=>`<div class="creator-launch-row"><strong>${x[0]}</strong><span>${x[1]}</span><span class="${x[2].startsWith("-")?"danger-text":x[2]==="LIVE"?"up":""}">${x[2]}</span><span>${x[3]}</span></div>`).join("");
+document.querySelector("#creator-launches").innerHTML=launchMarkup;
+document.querySelector("#full-creator-launches").innerHTML=launchMarkup;
+document.querySelector("#bundle-wallets").innerHTML=bundleWallets.map(x=>`<div class="bundle-row"><strong>${x[0]}</strong><span>${x[1]} supply</span><span>${x[2]}</span><span>${x[3]}</span></div>`).join("");
+document.querySelector("#holders-list").innerHTML=holders.map(x=>`<div class="holder-row"><strong>${x[0]}</strong><span>${x[1]}</span><span>${x[2]}</span><span>${x[3]}</span></div>`).join("");
+document.querySelector("#trades-list").innerHTML=trades.map(x=>`<div class="trade-row"><strong class="${x[0]==="BUY"?"up":"danger-text"}">${x[0]}</strong><span>${x[1]}</span><span>${x[2]}</span><span>${x[3]} ago</span></div>`).join("");
+
+function openToken(symbol){
+  const token=launches.find(x=>x.symbol===symbol)||launches[1];
+  document.querySelector("#detail-symbol").textContent=token.symbol;
+  document.querySelector("#detail-icon").textContent=token.symbol.slice(0,2);
+  document.querySelector("#detail-name").textContent=token.name;
+  document.querySelector("#detail-ticker").textContent=token.symbol;
+  document.querySelector("#detail-cap").textContent=token.cap;
+  const risk=document.querySelector("#detail-risk");risk.textContent=token.label;risk.className=`risk-pill ${token.risk}`;
+  changeView("token");
+}
 
 let activeFilter="all";
 document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));tab.classList.add("active");activeFilter=tab.dataset.filter;renderLaunches(activeFilter,document.querySelector("#token-search").value)}));
@@ -45,10 +74,18 @@ document.querySelector(".search-trigger").addEventListener("click",()=>{command.
 command.addEventListener("click",e=>{if(e.target===command)command.classList.remove("open")});
 document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();command.classList.add("open")}if(e.key==="Escape")command.classList.remove("open")});
 
-function inspect(){const input=document.querySelector("#scan-input");if(!input.value.trim()){input.focus();showToast("Paste a token, wallet, transaction or block to inspect.");return}showToast(`Queued inspection for ${input.value.slice(0,18)}${input.value.length>18?"…":""}`)}
+function openDrawer(){document.querySelector("#tx-drawer").classList.add("open");document.querySelector("#drawer-scrim").classList.add("open");document.querySelector("#tx-drawer").setAttribute("aria-hidden","false")}
+function closeDrawer(){document.querySelector("#tx-drawer").classList.remove("open");document.querySelector("#drawer-scrim").classList.remove("open");document.querySelector("#tx-drawer").setAttribute("aria-hidden","true")}
+function inspect(){const input=document.querySelector("#scan-input");if(!input.value.trim()){input.focus();showToast("Paste a token, wallet, transaction or block to inspect.");return}openDrawer()}
 document.querySelector("#scan-button").addEventListener("click",inspect);document.querySelector("#scan-input").addEventListener("keydown",e=>{if(e.key==="Enter")inspect()});
 document.querySelectorAll(".wallet-btn,.empty-state .primary-btn").forEach(b=>b.addEventListener("click",()=>showToast("Wallet connection will activate with the Arc data layer.")));
 document.querySelectorAll(".graph-node").forEach(n=>n.addEventListener("click",()=>showToast(`Selected ${n.dataset.wallet||"linked wallet"}`)));
+document.querySelectorAll("[data-detail-tab]").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll("[data-detail-tab]").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".detail-pane").forEach(p=>p.classList.remove("active"));tab.classList.add("active");document.querySelector(`#${tab.dataset.detailTab}-pane`).classList.add("active")}));
+document.querySelectorAll(".open-creator").forEach(button=>button.addEventListener("click",()=>changeView("creator")));
+document.querySelectorAll(".watch-toggle").forEach(button=>button.addEventListener("click",()=>{const watched=button.classList.toggle("active");button.textContent=watched?"✓ Watching":"+ Watch";showToast(watched?"Added to your ArcEye watchlist.":"Removed from your watchlist.")}));
+document.querySelectorAll(".copy-address").forEach(button=>button.addEventListener("click",async()=>{try{await navigator.clipboard.writeText("0xbd8a7ea8cfca7b4e5f5041d7d4b17bc317c5ce42cfbc42066a00cf26b43eb53f");showToast("Address copied to clipboard.")}catch{showToast("0xbd8a7e…eb53f")}}));
+document.querySelectorAll(".block-row,.trade-row").forEach(row=>row.addEventListener("click",openDrawer));
+document.querySelector("#close-drawer").addEventListener("click",closeDrawer);document.querySelector("#drawer-scrim").addEventListener("click",closeDrawer);
 
 let toastTimer;function showToast(message){const toast=document.querySelector("#toast");toast.querySelector("p").textContent=message;toast.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove("show"),3200)}
 setTimeout(()=>showToast("Prototype online. On-chain values are representative data."),900);
