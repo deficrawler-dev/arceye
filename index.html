@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ArcEye — creator history, wallet relationships, bundle detection, and launch intelligence for Arc." />
+    <meta name="theme-color" content="#080b0e" />
+    <title>ArcEye — Arc launch intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <header class="topbar">
+      <a class="brand" href="#" data-view="terminal" aria-label="ArcEye home">
+        <span class="brand-mark"><i></i><i></i><i></i></span>
+        <span>ARC<span>EYE</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <button class="nav-item active" data-view="terminal">Terminal</button>
+        <button class="nav-item" data-view="scan">Scan</button>
+        <button class="nav-item" data-view="network">Network</button>
+        <button class="nav-item" data-view="watchlist">Watchlist <span class="nav-count">4</span></button>
+      </nav>
+      <div class="top-actions">
+        <div class="chain-status"><span></span> ARC MAINNET</div>
+        <button class="icon-btn search-trigger" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg></button>
+        <button class="wallet-btn">Connect wallet</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="view active" id="terminal-view">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow"><span>LIVE</span> ARC LAUNCH INTELLIGENCE</div>
+            <h1>Know the creator.<br />Read the <em>connections.</em></h1>
+            <p>Creator history, coordinated wallets and fee trails—resolved before you enter the trade.</p>
+          </div>
+          <div class="network-pulse" aria-hidden="true">
+            <div class="pulse-ring r1"></div><div class="pulse-ring r2"></div><div class="pulse-ring r3"></div>
+            <div class="eye-core"><span></span></div>
+            <i class="node n1"></i><i class="node n2"></i><i class="node n3"></i><i class="node n4"></i>
+          </div>
+        </div>
+
+        <div class="stat-strip">
+          <div><span>24H LAUNCHES</span><strong>184</strong><small class="up">+31.4%</small></div>
+          <div><span>FLAGGED CREATORS</span><strong>27</strong><small>14.6% of launches</small></div>
+          <div><span>CREATOR FEES TRACKED</span><strong>$418.2K</strong><small class="up">+$82K today</small></div>
+          <div><span>ARC FINALITY</span><strong>0.48s</strong><small class="live">● LIVE</small></div>
+        </div>
+
+        <div class="toolbar">
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-filter="all">All launches <span>184</span></button>
+            <button class="tab" data-filter="new">New <span>42</span></button>
+            <button class="tab" data-filter="flagged">Flagged <span>27</span></button>
+            <button class="tab" data-filter="watching">Watching <span>4</span></button>
+          </div>
+          <div class="table-tools">
+            <label class="compact-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="token-search" placeholder="Token, creator, address" /></label>
+            <button class="filter-btn">Filters <span>2</span></button>
+          </div>
+        </div>
+
+        <div class="data-shell">
+          <div class="table-scroll">
+            <table class="launch-table">
+              <thead><tr><th>Token</th><th>Age</th><th>Market cap</th><th>1H</th><th>Liquidity</th><th>Creator record</th><th>Bundle</th><th>ArcEye read</th><th></th></tr></thead>
+              <tbody id="launch-rows"></tbody>
+            </table>
+          </div>
+          <div class="table-foot"><span><i></i> Streaming blocks from Arc mainnet</span><button>View all 184 launches →</button></div>
+        </div>
+
+        <div class="lower-grid">
+          <article class="panel fee-panel">
+            <div class="panel-head"><div><span class="kicker">CREATOR FEE RADAR</span><h2>Repeat fee farmers</h2></div><button>View all →</button></div>
+            <div id="farmer-list"></div>
+          </article>
+          <article class="panel activity-panel">
+            <div class="panel-head"><div><span class="kicker">LIVE SIGNALS</span><h2>Network activity</h2></div><span class="streaming">● STREAMING</span></div>
+            <div id="activity-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="scan-view">
+        <div class="section-heading"><div><span class="kicker">ARCEYE SCAN</span><h1>Follow the money,<br />not the profile.</h1><p>Search any token, wallet, transaction or block on Arc.</p></div></div>
+        <div class="hero-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="scan-input" placeholder="Search address / tx hash / token / block" /><button id="scan-button">Inspect</button></div>
+        <div class="scan-grid">
+          <article class="panel wide-panel">
+            <div class="panel-head"><div><span class="kicker">RECENT BLOCKS</span><h2>Arc mainnet</h2></div><span class="streaming">● 0.48S FINALITY</span></div>
+            <div id="block-list" class="block-list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><span class="kicker">CHAIN PULSE</span><h2>Last 30 minutes</h2></div></div>
+            <div class="spark-wrap"><div class="spark-stats"><strong>42.8</strong><span>TPS</span></div><svg class="sparkline" viewBox="0 0 400 120" preserveAspectRatio="none"><path class="area" d="M0,100 L20,88 L40,94 L60,60 L80,76 L100,42 L120,67 L140,52 L160,70 L180,28 L200,40 L220,22 L240,64 L260,48 L280,55 L300,20 L320,34 L340,15 L360,30 L380,12 L400,25 L400,120 L0,120Z"/><path d="M0,100 L20,88 L40,94 L60,60 L80,76 L100,42 L120,67 L140,52 L160,70 L180,28 L200,40 L220,22 L240,64 L260,48 L280,55 L300,20 L320,34 L340,15 L360,30 L380,12 L400,25"/></svg></div>
+            <div class="metric-row"><span>Gas tracker</span><strong>0.000004 USDC</strong></div><div class="metric-row"><span>Pending tx</span><strong>12</strong></div><div class="metric-row"><span>Latest block</span><strong>#9,841,274</strong></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="network-view">
+        <div class="section-heading compact"><div><span class="kicker">WALLET RELATIONSHIPS</span><h1>Creator network</h1><p>Evidence-backed links across launch wallets, funders and fee withdrawals.</p></div><div class="legend"><span><i class="safe-dot"></i> Creator</span><span><i class="warn-dot"></i> Linked</span><span><i class="bad-dot"></i> Flagged</span></div></div>
+        <div class="network-layout">
+          <article class="panel graph-panel">
+            <div class="graph-toolbar"><button class="active">Money flow</button><button>Launch lineage</button><button>Shared buyers</button><span>7 wallets · 14 links</span></div>
+            <svg class="wallet-graph" viewBox="0 0 900 540" aria-label="Wallet relationship graph">
+              <g class="links"><path d="M447 270L220 135"/><path d="M447 270L700 125"/><path d="M447 270L720 360"/><path d="M447 270L210 410"/><path d="M220 135L105 275"/><path d="M700 125L805 245"/><path class="danger-link" d="M210 410L720 360"/></g>
+              <g class="graph-node main" data-wallet="0x71F2...A19C" transform="translate(447 270)"><circle r="59"/><circle class="inner" r="46"/><text y="-5">CREATOR</text><text class="addr" y="16">0x71F2…A19C</text></g>
+              <g class="graph-node bad" data-wallet="0x9A83...07EF" transform="translate(220 135)"><circle r="43"/><text y="-4">FEE WALLET</text><text class="addr" y="15">0x9A83…07EF</text></g>
+              <g class="graph-node" data-wallet="0x4BC1...831D" transform="translate(700 125)"><circle r="40"/><text y="-4">FUNDER</text><text class="addr" y="15">0x4BC1…831D</text></g>
+              <g class="graph-node bad" data-wallet="0x2D91...E210" transform="translate(720 360)"><circle r="46"/><text y="-4">NEW CREATOR</text><text class="addr" y="15">0x2D91…E210</text></g>
+              <g class="graph-node" data-wallet="0xA822...C611" transform="translate(210 410)"><circle r="39"/><text y="-4">BUYER</text><text class="addr" y="15">0xA822…C611</text></g>
+              <g class="graph-node small" transform="translate(105 275)"><circle r="30"/><text class="addr" y="4">0x19B…</text></g>
+              <g class="graph-node small" transform="translate(805 245)"><circle r="30"/><text class="addr" y="4">0xCC4…</text></g>
+            </svg>
+          </article>
+          <aside class="panel evidence-panel">
+            <div class="risk-summary"><span class="risk-score">87</span><div><span>CREATOR RISK</span><strong>HIGH RISK</strong><small>5 strong signals</small></div></div>
+            <h3>Resolved evidence</h3>
+            <div class="evidence"><span class="evidence-icon danger">↗</span><div><strong>Fee withdrawal → new creator</strong><p>0x9A83 funded 0x2D91 11m before a new launch.</p><small>VERY HIGH CONFIDENCE</small></div></div>
+            <div class="evidence"><span class="evidence-icon">⌁</span><div><strong>Shared first buyers</strong><p>6 wallets bought both launches within the first block.</p><small>HIGH CONFIDENCE</small></div></div>
+            <div class="evidence"><span class="evidence-icon">◎</span><div><strong>Repeated fee destination</strong><p>Creator fees from 4 tokens converged at one wallet.</p><small>HIGH CONFIDENCE</small></div></div>
+            <button class="primary-btn">Open creator dossier</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="watchlist-view">
+        <div class="empty-state"><span class="empty-eye"></span><span class="kicker">WATCHLIST</span><h1>Your highest-conviction signals,<br />without the noise.</h1><p>Four monitored creators are ready. Connect your wallet to sync alerts across devices.</p><button class="primary-btn">Connect wallet</button></div>
+      </section>
+    </main>
+
+    <div class="command" id="command-panel" aria-hidden="true"><div class="command-box"><div class="command-input"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="global-search" placeholder="Search ArcEye…" /><kbd>ESC</kbd></div><div class="command-options"><span>QUICK ROUTES</span><button data-view="scan">↗ Inspect a wallet</button><button data-view="network">⌁ Open creator network</button><button data-view="terminal">◉ View live launches</button></div></div></div>
+    <div class="toast" id="toast"><span>DEMO MODE</span><p>Data connection will be added in the indexer phase.</p></div>
+    <script src="app.js"></script>
+  </body>
+</html>
