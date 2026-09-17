@@ -1,10 +1,10 @@
 const launches = [
-  {symbol:"VOLT",name:"Arc Voltage",age:"42s",cap:"$84.2K",change:"+182%",liq:"$18.4K",record:"1 / 1",dead:"0 dead",bundle:"4.8%",risk:"low",label:"CLEAN",tags:["new"]},
-  {symbol:"GHOST",name:"Ghost Protocol",age:"2m",cap:"$211K",change:"+74.8%",liq:"$31.9K",record:"8 / 8",dead:"7 dead",bundle:"31.2%",risk:"high",label:"HIGH RISK",tags:["new","flagged"]},
-  {symbol:"KERN",name:"Kernel Cat",age:"5m",cap:"$47.6K",change:"-12.4%",liq:"$12.1K",record:"2 / 2",dead:"1 dead",bundle:"9.7%",risk:"medium",label:"CAUTION",tags:["flagged"]},
-  {symbol:"ARCX",name:"Arc Xeno",age:"11m",cap:"$592K",change:"+316%",liq:"$74.8K",record:"3 / 3",dead:"0 dead",bundle:"2.1%",risk:"low",label:"CLEAN",tags:["watching"]},
-  {symbol:"MINT",name:"Mint Condition",age:"19m",cap:"$128K",change:"+8.2%",liq:"$24.6K",record:"12 / 12",dead:"10 dead",bundle:"26.4%",risk:"high",label:"FEE FARMER",tags:["flagged","watching"]},
-  {symbol:"NOVA",name:"Nova Relay",age:"27m",cap:"$73.1K",change:"-31.9%",liq:"$15.2K",record:"1 / 1",dead:"0 dead",bundle:"7.2%",risk:"medium",label:"WATCH",tags:["watching"]}
+  {symbol:"VOLT",name:"Arc Voltage",image:"assets/tokens/volt.svg",age:"42s",cap:"$84.2K",change:"+182%",liq:"$18.4K",record:"1 / 1",dead:"0 dead",bundle:"4.8%",risk:"low",label:"CLEAN",tags:["new"]},
+  {symbol:"GHOST",name:"Ghost Protocol",image:"assets/tokens/ghost.svg",age:"2m",cap:"$211K",change:"+74.8%",liq:"$31.9K",record:"8 / 8",dead:"7 dead",bundle:"31.2%",risk:"high",label:"HIGH RISK",tags:["new","flagged"]},
+  {symbol:"KERN",name:"Kernel Cat",image:"assets/tokens/kern.svg",age:"5m",cap:"$47.6K",change:"-12.4%",liq:"$12.1K",record:"2 / 2",dead:"1 dead",bundle:"9.7%",risk:"medium",label:"CAUTION",tags:["flagged"]},
+  {symbol:"ARCX",name:"Arc Xeno",image:"assets/tokens/arcx.svg",age:"11m",cap:"$592K",change:"+316%",liq:"$74.8K",record:"3 / 3",dead:"0 dead",bundle:"2.1%",risk:"low",label:"CLEAN",tags:["watching"]},
+  {symbol:"MINT",name:"Mint Condition",image:"assets/tokens/mint.svg",age:"19m",cap:"$128K",change:"+8.2%",liq:"$24.6K",record:"12 / 12",dead:"10 dead",bundle:"26.4%",risk:"high",label:"FEE FARMER",tags:["flagged","watching"]},
+  {symbol:"NOVA",name:"Nova Relay",image:"assets/tokens/nova.svg",age:"27m",cap:"$73.1K",change:"-31.9%",liq:"$15.2K",record:"1 / 1",dead:"0 dead",bundle:"7.2%",risk:"medium",label:"WATCH",tags:["watching"]}
 ];
 const farmers=[
   {wallet:"0x71F2…A19C",launches:"12 launches",dead:"10 / 12 dead",fees:"$41,820",risk:"High"},
@@ -21,7 +21,7 @@ const blocks=[
   ["#9,841,274","0x4fe…9a1","118 tx","now"],["#9,841,273","0xa08…cc2","94 tx","0.5s"],["#9,841,272","0x91b…3e8","131 tx","1.0s"],["#9,841,271","0x37d…42f","86 tx","1.5s"],["#9,841,270","0xef4…761","109 tx","2.0s"]
 ];
 const creatorLaunches=[
-  ["GHOST","$211K","LIVE","+74.8%"],["MINT","$1.8M peak","-98.7%","2d ago"],["DEAD","$420K peak","-99.4%","4d ago"],["BOZO","$91K peak","-97.2%","7d ago"],["ARC7","$680K peak","-99.1%","11d ago"],["ZAP","$54K peak","-96.8%","14d ago"],["FOLD","$310K peak","-99.8%","17d ago"],["ZERO","$76K peak","-100%","19d ago"]
+  ["GHOST","assets/tokens/ghost.svg","$211K","LIVE","+74.8%"],["MINT","assets/tokens/mint.svg","$1.8M peak","-98.7%","2d ago"],["DEAD","assets/tokens/dead.svg","$420K peak","-99.4%","4d ago"],["BOZO","assets/tokens/bozo.svg","$91K peak","-97.2%","7d ago"],["ARC7","assets/tokens/arcx.svg","$680K peak","-99.1%","11d ago"],["ZAP","assets/tokens/volt.svg","$54K peak","-96.8%","14d ago"],["FOLD","assets/tokens/ghost.svg","$310K peak","-99.8%","17d ago"],["ZERO","assets/tokens/dead.svg","$76K peak","-100%","19d ago"]
 ];
 const bundleWallets=[
   ["0xA822…C611","4.82%","$10,170","Launch block"],["0x19B4…F882","4.11%","$8,672","Launch block"],["0xCC41…9A02","3.74%","$7,891","Launch block"],["0x831D…117C","3.20%","$6,752","+1 block"],["0xF294…20E1","2.97%","$6,267","+1 block"],["7 more wallets","12.36%","$26,080","≤ 4 blocks"]
@@ -37,14 +37,14 @@ const rowRoot=document.querySelector("#launch-rows");
 function renderLaunches(filter="all",query=""){
   const normalized=query.toLowerCase();
   const items=launches.filter(x=>(filter==="all"||x.tags.includes(filter))&&(`${x.symbol} ${x.name} ${x.label}`.toLowerCase().includes(normalized)));
-  rowRoot.innerHTML=items.length?items.map(x=>`<tr data-token="${x.symbol}"><td><div class="token-cell"><span class="token-icon">${x.symbol.slice(0,2)}</span><div><strong>${x.symbol} · ${x.name}</strong><small>0x${Math.random().toString(16).slice(2,8)}…${Math.random().toString(16).slice(2,6)}</small></div></div></td><td class="mono">${x.age}</td><td class="mono">${x.cap}</td><td class="mono change ${x.change.startsWith("+")?"up":"down"}">${x.change}</td><td class="mono">${x.liq}</td><td><span class="record">${x.record}<small class="${x.dead.startsWith("0")?"":"death"}">${x.dead}</small></span></td><td class="mono">${x.bundle}</td><td><span class="risk-pill ${x.risk}">${x.label}</span></td><td class="row-open">›</td></tr>`).join(""):`<tr><td colspan="9" style="text-align:center;padding:38px;color:#7f8c93">No matching launches.</td></tr>`;
+  rowRoot.innerHTML=items.length?items.map(x=>`<tr data-token="${x.symbol}"><td><div class="token-cell"><img class="token-icon" src="${x.image}" alt="${x.name} token" /><div><strong>${x.symbol} · ${x.name}</strong><small>0x${Math.random().toString(16).slice(2,8)}…${Math.random().toString(16).slice(2,6)}</small></div></div></td><td class="mono">${x.age}</td><td class="mono">${x.cap}</td><td class="mono change ${x.change.startsWith("+")?"up":"down"}">${x.change}</td><td class="mono">${x.liq}</td><td><span class="record">${x.record}<small class="${x.dead.startsWith("0")?"":"death"}">${x.dead}</small></span></td><td class="mono">${x.bundle}</td><td><span class="risk-pill ${x.risk}">${x.label}</span></td><td class="row-open">›</td></tr>`).join(""):`<tr><td colspan="9" style="text-align:center;padding:38px;color:#7f8c93">No matching launches.</td></tr>`;
   rowRoot.querySelectorAll("tr[data-token]").forEach(row=>row.addEventListener("click",()=>openToken(row.dataset.token)));
 }
 renderLaunches();
 document.querySelector("#farmer-list").innerHTML=farmers.map(x=>`<div class="farmer-row"><div class="wallet-id"><i class="identicon"></i><div><strong>${x.wallet}</strong><br><span>${x.launches}</span></div></div><span class="death">${x.dead}</span><span>${x.fees} fees</span><span class="risk-pill ${x.risk.toLowerCase()}">${x.risk.toUpperCase()}</span></div>`).join("");
 document.querySelector("#activity-list").innerHTML=activities.map(x=>`<div class="activity-item"><span class="activity-icon">${x.icon}</span><p>${x.text}</p><time>${x.time}</time></div>`).join("");
 document.querySelector("#block-list").innerHTML=blocks.map(x=>`<div class="block-row"><strong>${x[0]}</strong><span>Validator ${x[1]}</span><span>${x[2]}</span><span>${x[3]} ago</span></div>`).join("");
-const launchMarkup=creatorLaunches.map((x,i)=>`<div class="creator-launch-row"><strong>${x[0]}</strong><span>${x[1]}</span><span class="${x[2].startsWith("-")?"danger-text":x[2]==="LIVE"?"up":""}">${x[2]}</span><span>${x[3]}</span></div>`).join("");
+const launchMarkup=creatorLaunches.map(x=>`<div class="creator-launch-row"><strong class="launch-token"><img src="${x[1]}" alt="" />${x[0]}</strong><span>${x[2]}</span><span class="${x[3].startsWith("-")?"danger-text":x[3]==="LIVE"?"up":""}">${x[3]}</span><span>${x[4]}</span></div>`).join("");
 document.querySelector("#creator-launches").innerHTML=launchMarkup;
 document.querySelector("#full-creator-launches").innerHTML=launchMarkup;
 document.querySelector("#bundle-wallets").innerHTML=bundleWallets.map(x=>`<div class="bundle-row"><strong>${x[0]}</strong><span>${x[1]} supply</span><span>${x[2]}</span><span>${x[3]}</span></div>`).join("");
@@ -54,7 +54,8 @@ document.querySelector("#trades-list").innerHTML=trades.map(x=>`<div class="trad
 function openToken(symbol){
   const token=launches.find(x=>x.symbol===symbol)||launches[1];
   document.querySelector("#detail-symbol").textContent=token.symbol;
-  document.querySelector("#detail-icon").textContent=token.symbol.slice(0,2);
+  document.querySelector("#detail-icon").src=token.image;
+  document.querySelector("#detail-icon").alt=`${token.name} token`;
   document.querySelector("#detail-name").textContent=token.name;
   document.querySelector("#detail-ticker").textContent=token.symbol;
   document.querySelector("#detail-cap").textContent=token.cap;
@@ -66,8 +67,14 @@ let activeFilter="all";
 document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));tab.classList.add("active");activeFilter=tab.dataset.filter;renderLaunches(activeFilter,document.querySelector("#token-search").value)}));
 document.querySelector("#token-search").addEventListener("input",e=>renderLaunches(activeFilter,e.target.value));
 
-function changeView(name){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));document.querySelector(`#${name}-view`)?.classList.add("active");document.querySelectorAll(".nav-item").forEach(n=>n.classList.toggle("active",n.dataset.view===name));document.querySelector("#command-panel").classList.remove("open");window.scrollTo({top:0,behavior:"smooth"});}
+function closeMenu(){document.querySelector("#mobile-menu").classList.remove("open");document.querySelector("#mobile-menu-scrim").classList.remove("open");document.querySelector("#mobile-menu").setAttribute("aria-hidden","true");document.querySelector("#menu-toggle").setAttribute("aria-expanded","false")}
+function changeView(name){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));document.querySelector(`#${name}-view`)?.classList.add("active");document.querySelectorAll(".nav-item,.mobile-nav-item").forEach(n=>n.classList.toggle("active",n.dataset.view===name));document.querySelector("#command-panel").classList.remove("open");closeMenu();window.scrollTo({top:0,behavior:"smooth"});}
 document.querySelectorAll("[data-view]").forEach(el=>el.addEventListener("click",e=>{e.preventDefault();changeView(el.dataset.view)}));
+document.querySelector("#menu-toggle").addEventListener("click",()=>{document.querySelector("#mobile-menu").classList.add("open");document.querySelector("#mobile-menu-scrim").classList.add("open");document.querySelector("#mobile-menu").setAttribute("aria-hidden","false");document.querySelector("#menu-toggle").setAttribute("aria-expanded","true")});
+document.querySelector("#menu-close").addEventListener("click",closeMenu);document.querySelector("#mobile-menu-scrim").addEventListener("click",closeMenu);
+document.querySelectorAll("[data-scroll]").forEach(button=>button.addEventListener("click",()=>document.querySelector(`#${button.dataset.scroll}`)?.scrollIntoView({behavior:"smooth"})));
+document.querySelectorAll(".market-bubble").forEach(bubble=>bubble.addEventListener("click",()=>openToken(bubble.dataset.token)));
+document.querySelectorAll(".bubble-controls button").forEach(button=>button.addEventListener("click",()=>{document.querySelectorAll(".bubble-controls button").forEach(item=>item.classList.remove("active"));button.classList.add("active");showToast(`${button.textContent} market view selected.`)}));
 
 const command=document.querySelector("#command-panel");
 document.querySelector(".search-trigger").addEventListener("click",()=>{command.classList.add("open");command.setAttribute("aria-hidden","false");setTimeout(()=>document.querySelector("#global-search").focus(),50)});
