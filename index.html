@@ -48,7 +48,7 @@
         <div class="page-head forensic-hero">
           <div class="hero-copy">
             <div class="eyebrow"><span>● LIVE ON ARC</span> ON-CHAIN CREATOR INTELLIGENCE</div>
-            <h1>Every launch leaves a trail.<br /><em>ArcEye sees it.</em></h1>
+            <h1>Every launch.<br /><em>ArcEye sees it.</em></h1>
             <p>Trace creator history, bundled supply, linked wallets and fee exits before they become your exit liquidity.</p>
             <div class="hero-actions"><button class="primary-btn" data-view="scan">Inspect a launch <span>→</span></button><button class="secondary-btn" data-view="launches">Explore live tokens <span>↗</span></button></div>
             <div class="hero-proof"><span><i>ϟ</i><strong>On-chain evidence</strong></span><span><i>◇</i><strong>Wallet lineage</strong></span><span><i>⌁</i><strong>Fee trails</strong></span></div>
@@ -57,9 +57,9 @@
             <div class="scanner-steps"><span><b>01</b> SCAN</span><span><b>02</b> TRACE</span><span><b>03</b> CONNECT</span></div>
             <div class="scan-token-card">
               <span class="kicker">SELECTED LAUNCH</span>
-              <div><img src="assets/tokens/argus.svg" alt="" /><strong>$TOKEN</strong></div>
-              <small>Creator and launch contract</small>
-              <button data-view="scan">Scan with ArcEye →</button>
+              <div><img id="hero-token-image" src="assets/tokens/argus.svg" alt="" /><strong id="hero-token-symbol">$ARGUS</strong></div>
+              <small id="hero-token-name">Argus native token</small>
+              <code id="hero-token-address">0xeCe5…cb3c</code>
             </div>
             <div class="scanner-core"><span class="orbit o1"></span><span class="orbit o2"></span><span class="orbit o3"></span><img src="assets/arceye-logo.png" alt="" /><small>ARCEYE SCANNER</small></div>
             <svg class="scanner-lines" viewBox="0 0 760 430" preserveAspectRatio="none" aria-hidden="true"><path d="M175 216C250 216 265 216 330 216"/><path d="M430 216C500 216 490 62 545 62"/><path d="M430 216C500 216 500 139 545 139"/><path d="M430 216H545"/><path class="alert-line" d="M430 216C500 216 500 293 545 293"/><path d="M430 216C500 216 490 370 545 370"/></svg>
@@ -173,7 +173,7 @@
       </section>
 
       <section class="view" id="scan-view">
-        <div class="scan-pro-head"><span class="kicker">ARCEYE SCAN</span><h1>One search.<br /><em>The full trail.</em></h1><p>Paste a token contract, wallet, transaction hash or block number. ArcEye identifies the input and routes you to the right intelligence view.</p></div>
+        <div class="scan-pro-head"><img class="scan-heading-logo" src="assets/arceye-logo.png" alt="ArcEye scanner" /><h1>One search.<br /><em>The full trail.</em></h1><p>Paste a token contract, wallet, transaction hash or block number. ArcEye identifies the input and routes you to the right intelligence view.</p></div>
         <div class="scan-console">
           <div class="scan-mode-row"><button class="active" data-scan-mode="auto">Auto detect</button><button data-scan-mode="token">Token</button><button data-scan-mode="wallet">Wallet</button><button data-scan-mode="transaction">Transaction</button><button data-scan-mode="block">Block</button></div>
           <div class="scan-command"><span class="scan-prompt">⌁</span><input id="scan-input" autocomplete="off" spellcheck="false" placeholder="Paste an Arc address, transaction hash or block number" /><button id="scan-button">Run scan <span>↗</span></button></div>
@@ -196,7 +196,7 @@
         <div class="network-explainer"><img src="assets/tokens/ghost.svg" alt="Ghost Protocol token" /><div><span class="kicker">YOU ARE VIEWING</span><strong>Ghost Protocol creator cluster</strong><p>The centre wallet created GHOST. Lines show direct funding, fee transfers or coordinated buying. Click a wallet to inspect why ArcEye linked it.</p></div><div class="explain-metrics"><span><strong>7</strong> wallets</span><span><strong>14</strong> verified links</span><span><strong>31.2%</strong> controlled supply</span></div></div>
         <div class="network-layout">
           <article class="panel graph-panel">
-            <div class="graph-toolbar"><button class="active">Money flow</button><button>Launch lineage</button><button>Shared buyers</button><span>7 wallets · 14 links</span></div>
+            <div class="graph-toolbar"><button class="active" data-network-mode="money">Money flow</button><button data-network-mode="lineage">Launch lineage</button><button data-network-mode="buyers">Shared buyers</button><span id="network-mode-count">7 wallets · 14 links</span></div>
             <svg class="wallet-graph" viewBox="0 0 900 540" aria-label="Wallet relationship graph">
               <g class="links"><path d="M447 270L220 135"/><path d="M447 270L700 125"/><path d="M447 270L720 360"/><path d="M447 270L210 410"/><path d="M220 135L105 275"/><path d="M700 125L805 245"/><path class="danger-link" d="M210 410L720 360"/></g>
               <g class="graph-node main" data-wallet="0x71F2...A19C" transform="translate(447 270)"><circle r="59"/><circle class="inner" r="46"/><text y="-5">CREATOR</text><text class="addr" y="16">0x71F2…A19C</text></g>
@@ -214,7 +214,7 @@
             <div class="evidence"><span class="evidence-icon danger">↗</span><div><strong>Fee withdrawal → new creator</strong><p>0x9A83 funded 0x2D91 11m before a new launch.</p><small>VERY HIGH CONFIDENCE</small></div></div>
             <div class="evidence"><span class="evidence-icon">⌁</span><div><strong>Shared first buyers</strong><p>6 wallets bought both launches within the first block.</p><small>HIGH CONFIDENCE</small></div></div>
             <div class="evidence"><span class="evidence-icon">◎</span><div><strong>Repeated fee destination</strong><p>Creator fees from 4 tokens converged at one wallet.</p><small>HIGH CONFIDENCE</small></div></div>
-            <button class="primary-btn">Open creator dossier</button>
+            <button class="primary-btn open-network-dossier">Open creator dossier</button>
           </aside>
         </div>
       </section>
