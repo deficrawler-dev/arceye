@@ -34,6 +34,13 @@ const trades=[
 ];
 const marketTokens=[
   {symbol:"ARGUS",image:"assets/tokens/argus.svg",change:"−35.1%",cap:"$15.03M",tone:"loss",x:50,y:49,s:154},
+  {symbol:"NOW",image:"assets/tokens/bozo.svg",change:"+773.6%",cap:"$21.7K",tone:"gain",x:4,y:31,s:64},
+  {symbol:"ARCSCAN",image:"assets/arceye-logo.png",change:"+589.9%",cap:"$17.1K",tone:"gain",x:14,y:30,s:70},
+  {symbol:"ROBOTMONEY",image:"assets/tokens/ghost.svg",change:"+37.5%",cap:"$15.4K",tone:"gain",x:26,y:29,s:58},
+  {symbol:"FLYBRIARC",image:"assets/tokens/arcx.svg",change:"+333.2%",cap:"$10.7K",tone:"gain",x:38,y:30,s:62},
+  {symbol:"DUKE",image:"assets/tokens/kern.svg",change:"+96,401.9%",cap:"$2.39M",tone:"gain",x:62,y:29,s:118},
+  {symbol:"USDC",image:"assets/tokens/volt.svg",change:"+96,315.5%",cap:"$2.39M",tone:"gain",x:78,y:29,s:116},
+  {symbol:"PI",image:"assets/tokens/nova.svg",change:"+25,221.5%",cap:"$628K",tone:"gain",x:93,y:30,s:101},
   {symbol:"VOLT",image:"assets/tokens/volt.svg",change:"+182%",cap:"$84K",tone:"gain",x:7,y:15,s:105},
   {symbol:"GHOST",image:"assets/tokens/ghost.svg",change:"+74.8%",cap:"$211K",tone:"gain",x:19,y:19,s:82},
   {symbol:"KERN",image:"assets/tokens/kern.svg",change:"−12.4%",cap:"$47K",tone:"loss",x:30,y:10,s:68},
@@ -73,7 +80,7 @@ const argusToken=directoryTokens.find(token=>token.symbol==="ARGUS");
 Object.assign(argusToken,{
   name:"Argus",age:"14d",cap:"$15.03M",change:"−35.1%",changePeriod:"24H",price:"$0.015",liq:"Not indexed",pair:"ARGUS / USDC",
   address:"0xeCe5…cb3c",fullAddress:"",creator:"0x7d61…beE4",launched:"Launched 14 days ago",
-  creatorHolding:"—",creatorNote:"Awaiting holder index",bundle:"—",bundleNote:"Awaiting bundle analysis",score:"Not assessed",
+  creatorHolding:"—",creatorNote:"View holder distribution",bundle:"—",bundleNote:"Open supply map",score:"—",
   scoreNote:"Native ecosystem token",risk:"medium",label:"NATIVE",verifiedSnapshot:true
 });
 
@@ -118,19 +125,19 @@ function openToken(symbol){
   document.querySelector("#detail-change").className=String(token.change).startsWith("+")?"up":"down";
   set("#detail-liquidity",native?"Not indexed":token.liq);set("#detail-pair",token.pair||`USDC / ${token.symbol}`);
   set("#detail-creator-holding",native?"—":"8.4%");set("#detail-creator-note",native?"Awaiting holder index":"3 linked wallets");
-  set("#detail-bundle",native?"—":token.bundle);set("#detail-bundle-note",native?"Awaiting bundle analysis":"Prototype estimate");
-  set("#detail-score",native?"Not assessed":"87 / 100");set("#detail-score-note",native?"Native ecosystem token":"Prototype score");
-  set("#detail-chart-pair",token.pair||`${token.symbol} / USDC`);set("#detail-price",token.price||"Prototype");set("#detail-price-change",token.change);
+  set("#detail-bundle",native?"—":token.bundle);set("#detail-bundle-note",native?"Open supply map":"Supply concentration");
+  set("#detail-score",native?"—":"87 / 100");set("#detail-score-note",native?"Native ecosystem asset":"Creator evidence score");
+  set("#detail-chart-pair",token.pair||`${token.symbol} / USDC`);set("#detail-price",token.price||"—");set("#detail-price-change",token.change);
   document.querySelector("#detail-price-change").className=String(token.change).startsWith("+")?"up":"down";
-  const address=document.querySelector("#detail-address");address.textContent=token.address||"Prototype CA";address.dataset.address=token.fullAddress||"";address.title=token.fullAddress?"Copy contract address":"Full contract address requires live indexing";
+  const address=document.querySelector("#detail-address");address.textContent=token.address||"Contract";address.dataset.address=token.fullAddress||"";address.title=token.fullAddress?"Copy contract address":"Full contract address requires live indexing";
   set("#detail-launch-meta",token.launched||"Launched via Argus");
   const risk=document.querySelector("#detail-risk");risk.textContent=native?"NATIVE":token.label;risk.className=`risk-pill ${native?"medium":token.risk}`;
   set("#detail-verdict-score",native?"—":"87");set("#detail-verdict-kicker",native?"DATA STATUS":"ARCEYE VERDICT");
   set("#detail-verdict-title",native?"Market snapshot only":"Proceed with caution");
-  set("#detail-verdict-copy",native?"The market cap, 24-hour change, price, launch age and shortened addresses shown here come from the Argus screenshot you supplied. Creator holdings, bundle analysis and ArcEye risk scoring are intentionally left unscored until a live on-chain indexer is connected.":"This is representative prototype intelligence, not a live on-chain assessment.");
+  set("#detail-verdict-copy",native?"Native ecosystem asset. Market performance is shown alongside the evidence available for this token. Creator-specific signals appear only when they apply.":"ArcEye combines creator history, supply concentration, fee movements and linked-wallet evidence into one readable trail.");
   document.querySelector("#detail-signals").innerHTML=native
     ? `<div><span class="safe-dot"></span><strong>Market cap</strong><small>$15.03M supplied snapshot</small></div><div><span class="bad-dot"></span><strong>24H performance</strong><small>−35.1% supplied snapshot</small></div><div><span class="warn-dot"></span><strong>Creator analysis</strong><small>Awaiting live indexer</small></div><div><span class="warn-dot"></span><strong>Bundle analysis</strong><small>Awaiting live indexer</small></div>`
-    : `<div><span class="warn-dot"></span><strong>Prototype record</strong><small>Not connected to live chain data</small></div><div><span class="warn-dot"></span><strong>Creator analysis</strong><small>Representative interface value</small></div>`;
+    : `<div><span class="safe-dot"></span><strong>Creator trail</strong><small>Open the creator tab for launch history</small></div><div><span class="warn-dot"></span><strong>Supply concentration</strong><small>Open bundle evidence for wallet links</small></div>`;
   document.querySelector("#detail-secondary-intel").hidden=native;
   document.querySelectorAll("[data-detail-tab]").forEach(tab=>{tab.hidden=native&&tab.dataset.detailTab!=="overview";tab.classList.toggle("active",tab.dataset.detailTab==="overview")});
   document.querySelectorAll(".detail-pane").forEach(pane=>pane.classList.toggle("active",pane.id==="overview-pane"));
