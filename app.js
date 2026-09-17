@@ -47,8 +47,7 @@ const marketTokens=[
   {symbol:"ARCX",image:"assets/tokens/arcx.svg",change:"+316%",cap:"$592K",tone:"gain",x:41,y:17,s:102},
   {symbol:"MINT",image:"assets/tokens/mint.svg",change:"+8.2%",cap:"$128K",tone:"gain",x:61,y:13,s:73},
   {symbol:"NOVA",image:"assets/tokens/nova.svg",change:"−31.9%",cap:"$73K",tone:"loss",x:72,y:19,s:91},
-  {symbol:"WAVE",image:"assets/tokens/arcx.svg",change:"+22.4%",cap:"$164K",tone:"gain",x:84,y:11,s:79},
-  {symbol:"PI",image:"assets/tokens/nova.svg",change:"+6.3%",cap:"$38K",tone:"gain",x:94,y:19,s:60},
+  {symbol:"WAVE",image:"assets/tokens/arcx.svg",change:"+483.1%",cap:"$14.5K",tone:"gain",x:84,y:11,s:79},
   {symbol:"SCOUT",image:"assets/tokens/bozo.svg",change:"+14.7%",cap:"$204K",tone:"gain",x:10,y:40,s:92},
   {symbol:"WLD",image:"assets/tokens/mint.svg",change:"+5.3%",cap:"$98K",tone:"gain",x:23,y:39,s:68},
   {symbol:"CRO",image:"assets/tokens/arcx.svg",change:"+24.1%",cap:"$302K",tone:"gain",x:34,y:37,s:84},
@@ -89,8 +88,17 @@ function bubbleMarkup(tokens,variant="full"){
   return tokens.map((token,index)=>{const layout=variant==="hero"?heroLayout[index]:null;const x=layout?.[0]??token.x;const y=layout?.[1]??token.y;const size=layout?.[2]??token.s;return `<button class="pro-bubble ${token.tone} ${token.symbol==="ARGUS"?"native":""}" data-token="${token.symbol}" style="--x:${x};--y:${y};--size:${size}px" aria-label="${token.symbol} ${token.change}"><img src="${token.image}" alt=""/><strong>${token.symbol}</strong><span>${token.change}</span><small>${token.cap}</small></button>`}).join("");
 }
 document.querySelector("#full-bubble-field").innerHTML=bubbleMarkup(marketTokens);
-document.querySelector("#home-bubble-field").innerHTML=bubbleMarkup(marketTokens.slice(0,21),"home");
+document.querySelector("#home-bubble-field").innerHTML=bubbleMarkup(marketTokens,"home");
 document.querySelector("#hero-bubble-field")?.replaceChildren();
+const heroTokenPool=directoryTokens.filter(token=>token.symbol&&token.image);
+let heroTokenIndex=0;
+function rotateHeroToken(){
+  const token=heroTokenPool[heroTokenIndex%heroTokenPool.length];heroTokenIndex+=1;
+  const card=document.querySelector(".scan-token-card");if(!card)return;
+  card.classList.add("switching");
+  setTimeout(()=>{document.querySelector("#hero-token-image").src=token.image;document.querySelector("#hero-token-symbol").textContent=`${token.symbol}`;document.querySelector("#hero-token-name").textContent=token.name;document.querySelector("#hero-token-address").textContent=token.address||`Arc launch · ${token.age}`;card.classList.remove("switching")},180);
+}
+rotateHeroToken();setInterval(rotateHeroToken,3600);
 
 const rowRoot=document.querySelector("#launch-rows");
 function tokenRowMarkup(x){const displayAddress=x.address||`0x${Math.random().toString(16).slice(2,8)}…${Math.random().toString(16).slice(2,6)}`;return `<tr data-token="${x.symbol}"><td><div class="token-cell"><img class="token-icon" src="${x.image}" alt="${x.name} token" /><div><strong>${x.symbol} · ${x.name}</strong><small>${displayAddress}</small></div></div></td><td class="mono">${x.age}</td><td class="mono">${x.cap}</td><td class="mono change ${String(x.change).startsWith("+")?"up":"down"}">${x.change}</td><td class="mono">${x.liq}</td><td><span class="record">${x.record}<small class="${x.dead.startsWith("0")?"":"death"}">${x.dead}</small></span></td><td class="mono">${x.bundle}</td><td><span class="risk-pill ${x.risk}">${x.label}</span></td><td class="row-open">›</td></tr>`}
@@ -157,7 +165,15 @@ document.querySelectorAll("[data-view]").forEach(el=>el.addEventListener("click"
 document.querySelector("#menu-toggle").addEventListener("click",()=>{document.querySelector("#mobile-menu").classList.add("open");document.querySelector("#mobile-menu-scrim").classList.add("open");document.querySelector("#mobile-menu").setAttribute("aria-hidden","false");document.querySelector("#menu-toggle").setAttribute("aria-expanded","true")});
 document.querySelector("#menu-close").addEventListener("click",closeMenu);document.querySelector("#mobile-menu-scrim").addEventListener("click",closeMenu);
 document.querySelectorAll("[data-scroll]").forEach(button=>button.addEventListener("click",()=>document.querySelector(`#${button.dataset.scroll}`)?.scrollIntoView({behavior:"smooth"})));
-document.querySelectorAll(".pro-bubble").forEach(bubble=>bubble.addEventListener("click",()=>openToken(bubble.dataset.token)));
+function enableBubbleDrag(bubble){
+  let active=false,moved=false,startX=0,startY=0,originX=0,originY=0,containerRect=null;
+  bubble.addEventListener("pointerdown",event=>{active=true;moved=false;startX=event.clientX;startY=event.clientY;containerRect=bubble.parentElement.getBoundingClientRect();const rect=bubble.getBoundingClientRect();originX=rect.left-containerRect.left+rect.width/2;originY=rect.top-containerRect.top+rect.height/2;bubble.setPointerCapture(event.pointerId);bubble.classList.add("dragging")});
+  bubble.addEventListener("pointermove",event=>{if(!active)return;const dx=event.clientX-startX,dy=event.clientY-startY;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;const radius=bubble.offsetWidth/2;const x=Math.max(radius,Math.min(containerRect.width-radius,originX+dx));const y=Math.max(radius,Math.min(containerRect.height-radius,originY+dy));bubble.style.left=`${x}px`;bubble.style.top=`${y}px`});
+  const finish=()=>{if(!active)return;active=false;bubble.classList.remove("dragging");if(moved){bubble.dataset.dragged="true";setTimeout(()=>delete bubble.dataset.dragged,120)}};
+  bubble.addEventListener("pointerup",finish);bubble.addEventListener("pointercancel",finish);
+  bubble.addEventListener("click",event=>{if(bubble.dataset.dragged){event.preventDefault();event.stopPropagation();return}openToken(bubble.dataset.token)});
+}
+document.querySelectorAll(".pro-bubble").forEach(enableBubbleDrag);
 document.querySelectorAll(".bubble-controls button,.mini-time-controls button").forEach(button=>button.addEventListener("click",()=>{const group=button.parentElement;group.querySelectorAll("button").forEach(item=>item.classList.remove("active"));button.classList.add("active");showToast(`${button.textContent} market view selected.`)}));
 document.querySelectorAll(".farmer-row").forEach(row=>row.addEventListener("click",()=>{document.querySelector("#farmer-wallet").textContent=row.dataset.wallet;changeView("farmer")}));
 document.querySelectorAll(".activity-item").forEach((row,index)=>row.addEventListener("click",()=>{if(index===1||index===3)changeView("network");else openDrawer()}));
@@ -173,34 +189,75 @@ document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key==="k"){
 
 function openDrawer(){document.querySelector("#tx-drawer").classList.add("open");document.querySelector("#drawer-scrim").classList.add("open");document.querySelector("#tx-drawer").setAttribute("aria-hidden","false")}
 function closeDrawer(){document.querySelector("#tx-drawer").classList.remove("open");document.querySelector("#drawer-scrim").classList.remove("open");document.querySelector("#tx-drawer").setAttribute("aria-hidden","true")}
-let detectedScan={type:"",value:""};
-function detectInput(value){
-  const raw=value.trim();
-  if(!raw)return null;
-  if(/^\d+$/.test(raw))return {type:"Block",kind:"BLOCK",title:`Block #${raw}`,action:"Inspect block transactions",view:"scan"};
-  if(/^0x[a-fA-F0-9]{64}$/.test(raw))return {type:"Transaction",kind:"TRANSACTION",title:"Transaction",action:"Trace asset flow",view:"scan"};
-  if(/^0x[a-fA-F0-9]{40}$/.test(raw)||raw.includes("…"))return {type:"Address",kind:"ADDRESS",title:"Arc address",action:"Open wallet intelligence",view:"network"};
+let detectedScan={type:"",value:""},selectedScanMode="auto";
+const ARC_RPC="https://rpc.mainnet.arc.io";
+async function rpcCall(method,params){
+  const response=await fetch(ARC_RPC,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",id:Date.now(),method,params})});
+  const payload=await response.json();if(payload.error)throw new Error(payload.error.message||"RPC request failed");return payload.result;
+}
+function decodeAbiText(hex){
+  if(!hex||hex==="0x")return "";
+  try{const clean=hex.slice(2);let data=clean;if(clean.length>64){const offset=parseInt(clean.slice(0,64),16)*2;const length=parseInt(clean.slice(offset,offset+64),16)*2;data=clean.slice(offset+64,offset+64+length)}else data=clean;const bytes=data.match(/.{1,2}/g).map(byte=>parseInt(byte,16)).filter(Boolean);return new TextDecoder().decode(new Uint8Array(bytes)).replace(/\0/g,"").trim()}catch{return ""}
+}
+function setDetectedMode(mode){
+  document.querySelectorAll("[data-scan-mode]").forEach(button=>button.classList.toggle("active",button.dataset.scanMode===mode));
+}
+async function classifyArcAddress(address){
+  if(selectedScanMode==="token")return {type:"Token",kind:"TOKEN",title:"Token contract",action:"Open token contract",view:"scan",address};
+  if(selectedScanMode==="wallet")return {type:"Wallet",kind:"WALLET",title:"Wallet address",action:"Open wallet intelligence",view:"network",address};
+  try{
+    const code=await rpcCall("eth_getCode",[address,"latest"]);
+    if(!code||code==="0x"||code==="0x0")return {type:"Wallet",kind:"WALLET",title:"Wallet address",action:"Open wallet intelligence",view:"network",address};
+    const [symbolHex,nameHex]=await Promise.all([
+      rpcCall("eth_call",[{to:address,data:"0x95d89b41"},"latest"]).catch(()=>null),
+      rpcCall("eth_call",[{to:address,data:"0x06fdde03"},"latest"]).catch(()=>null)
+    ]);
+    const symbol=decodeAbiText(symbolHex),name=decodeAbiText(nameHex);
+    if(symbol||name)return {type:"Token",kind:"TOKEN",title:symbol&&name?`${symbol} · ${name}`:(symbol||name),action:"Open token contract",view:"scan",address,rpcVerified:true};
+    return {type:"Contract",kind:"CONTRACT",title:"Smart contract",action:"Inspect contract activity",view:"scan",address};
+  }catch{
+    return {type:"Address",kind:"ADDRESS",title:"Arc address",action:"Inspect on Arc Explorer",view:"scan",address,rpcUnavailable:true};
+  }
+}
+async function detectInput(value){
+  const raw=value.trim();if(!raw)return null;
+  if(selectedScanMode==="block"||(/^\d+$/.test(raw)&&selectedScanMode==="auto"))return {type:"Block",kind:"BLOCK",title:`Block #${raw}`,action:"Inspect block transactions",view:"scan"};
+  if(selectedScanMode==="transaction"||(/^0x[a-fA-F0-9]{64}$/.test(raw)&&selectedScanMode==="auto"))return {type:"Transaction",kind:"TRANSACTION",title:"Transaction",action:"Trace asset flow",view:"scan"};
+  if(/^0x[a-fA-F0-9]{40}$/.test(raw))return classifyArcAddress(raw);
   const token=directoryTokens.find(item=>item.symbol.toLowerCase()===raw.replace("$","").toLowerCase()||item.name.toLowerCase().includes(raw.toLowerCase()));
   if(token)return {type:"Token",kind:"TOKEN",title:`${token.symbol} · ${token.name}`,action:"Open token intelligence",view:"token",symbol:token.symbol};
   return {type:"Search",kind:"SEARCH",title:raw.toUpperCase(),action:"Search Arc launches",view:"launches"};
 }
-function inspect(){
-  const input=document.querySelector("#scan-input"),result=detectInput(input.value);
-  if(!result){input.focus();showToast("Paste a token, wallet, transaction or block to inspect.");return}
-  detectedScan={...result,value:input.value.trim()};
+async function inspect(){
+  const input=document.querySelector("#scan-input"),button=document.querySelector("#scan-button"),raw=input.value.trim();
+  if(!raw){input.focus();showToast("Paste a token, wallet, transaction or block to inspect.");return}
+  button.disabled=true;button.innerHTML='Scanning Arc <span>···</span>';
+  const result=await detectInput(raw);
+  button.disabled=false;button.innerHTML='Run scan <span>↗</span>';
+  if(!result)return;
+  detectedScan={...result,value:raw};
+  setDetectedMode(result.type==="Token"?"token":result.type==="Wallet"?"wallet":result.type==="Transaction"?"transaction":result.type==="Block"?"block":"auto");
   document.querySelector("#scan-result-empty").hidden=true;document.querySelector("#scan-result-live").hidden=false;
   document.querySelector("#scan-kind").textContent=result.kind;document.querySelector("#scan-result-title").textContent=result.title;
-  document.querySelector("#scan-result-value").textContent=input.value.trim();document.querySelector("#scan-input-type").textContent=result.type;
+  document.querySelector("#scan-result-value").textContent=raw;document.querySelector("#scan-input-type").textContent=result.type;
   document.querySelector("#scan-next-action").textContent=result.action;document.querySelector("#scan-result-shell").classList.add("has-result");
+  document.querySelector("#scan-open-result").textContent=result.rpcVerified?"Open token contract →":result.rpcUnavailable?"Open Arc Explorer →":"Open intelligence →";
 }
 document.querySelector("#scan-button").addEventListener("click",inspect);document.querySelector("#scan-input").addEventListener("keydown",e=>{if(e.key==="Enter")inspect()});
 document.querySelectorAll("[data-scan-example]").forEach(button=>button.addEventListener("click",()=>{document.querySelector("#scan-input").value=button.dataset.scanExample;inspect()}));
-document.querySelectorAll("[data-scan-mode]").forEach(button=>button.addEventListener("click",()=>{document.querySelectorAll("[data-scan-mode]").forEach(item=>item.classList.remove("active"));button.classList.add("active");document.querySelector("#scan-input").focus()}));
-document.querySelector("#scan-open-result").addEventListener("click",()=>{if(detectedScan.symbol)openToken(detectedScan.symbol);else changeView(detectedScan.view||"scan")});
+document.querySelectorAll("[data-scan-mode]").forEach(button=>button.addEventListener("click",()=>{selectedScanMode=button.dataset.scanMode;setDetectedMode(selectedScanMode);document.querySelector("#scan-input").focus()}));
+document.querySelector("#scan-open-result").addEventListener("click",()=>{if(detectedScan.symbol)openToken(detectedScan.symbol);else if(detectedScan.address)window.open(`https://explorer.arc.io/address/${detectedScan.address}`,"_blank","noopener");else changeView(detectedScan.view||"scan")});
 document.querySelector("#scan-copy-result").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(detectedScan.value);showToast("Input copied.")}catch{showToast(detectedScan.value)}});
 document.querySelectorAll(".evidence-stack button").forEach(button=>button.addEventListener("click",()=>{changeView("network");setTimeout(()=>showToast(`${button.dataset.networkReason}: relationship view opened.`),250)}));
 document.querySelectorAll(".wallet-btn,.empty-state .primary-btn").forEach(b=>b.addEventListener("click",()=>showToast("Wallet connection will activate with the Arc data layer.")));
-document.querySelectorAll(".graph-node").forEach(node=>node.addEventListener("click",()=>{document.querySelectorAll(".graph-node").forEach(item=>item.classList.remove("selected"));node.classList.add("selected");const wallet=node.dataset.wallet||"linked wallet";const panel=document.querySelector("#network-evidence");panel.querySelector("h3").textContent="Selected wallet evidence";panel.querySelector(".evidence p").textContent=`${wallet} is connected through the highlighted money-flow path. Switch relationship modes to inspect funding, launch lineage or shared buyers.`;showToast(`Selected ${wallet}`)}));
+const networkModes={
+  money:{count:"7 wallets · 14 transfers",title:"Money-flow evidence",copy:"Follow funding and creator-fee transfers between wallets. Red paths mark movements that preceded another launch."},
+  lineage:{count:"4 creators · 8 launches",title:"Launch-lineage evidence",copy:"See which deployers created each token and where a creator resurfaced through a newly funded wallet."},
+  buyers:{count:"6 shared buyers",title:"Shared-buyer evidence",copy:"Compare first-block buyers across launches to reveal repeated coordinated accumulation patterns."}
+};
+document.querySelectorAll("[data-network-mode]").forEach(button=>button.addEventListener("click",()=>{document.querySelectorAll("[data-network-mode]").forEach(item=>item.classList.remove("active"));button.classList.add("active");const mode=button.dataset.networkMode,data=networkModes[mode],graph=document.querySelector(".wallet-graph");graph.className.baseVal=`wallet-graph mode-${mode}`;document.querySelector("#network-mode-count").textContent=data.count;const panel=document.querySelector("#network-evidence");panel.querySelector("h3").textContent=data.title;panel.querySelector(".evidence p").textContent=data.copy;showToast(`${button.textContent} view selected.`)}));
+document.querySelectorAll(".graph-node").forEach(node=>node.addEventListener("click",()=>{document.querySelectorAll(".graph-node").forEach(item=>item.classList.remove("selected"));node.classList.add("selected");const wallet=node.dataset.wallet||"linked wallet";const panel=document.querySelector("#network-evidence");panel.querySelector("h3").textContent="Selected wallet evidence";panel.querySelector(".evidence p").textContent=`${wallet} is connected through the active relationship layer. The highlighted edge shows the evidence path.`;showToast(`Selected ${wallet}`)}));
+document.querySelector(".open-network-dossier")?.addEventListener("click",()=>changeView("farmer"));
 document.querySelectorAll("[data-detail-tab]").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll("[data-detail-tab]").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".detail-pane").forEach(p=>p.classList.remove("active"));tab.classList.add("active");document.querySelector(`#${tab.dataset.detailTab}-pane`).classList.add("active")}));
 document.querySelectorAll(".open-creator").forEach(button=>button.addEventListener("click",()=>changeView("creator")));
 document.querySelectorAll(".watch-toggle").forEach(button=>button.addEventListener("click",()=>{const watched=button.classList.toggle("active");button.textContent=watched?"✓ Watching":"+ Watch";showToast(watched?"Added to your ArcEye watchlist.":"Removed from your watchlist.")}));
