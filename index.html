@@ -6,6 +6,8 @@
     <meta name="description" content="ArcEye — creator history, wallet relationships, bundle detection, and launch intelligence for Arc." />
     <meta name="theme-color" content="#09070f" />
     <title>ArcEye — Arc launch intelligence</title>
+    <link rel="icon" type="image/png" href="assets/arceye-logo.png" />
+    <link rel="apple-touch-icon" href="assets/arceye-logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -43,34 +45,47 @@
 
     <main>
       <section class="view active" id="terminal-view">
-        <div class="page-head">
+        <div class="page-head forensic-hero">
           <div class="hero-copy">
-            <div class="eyebrow"><span>● LIVE ON ARC</span> BUILT FOR ARGUS LAUNCHES</div>
-            <h1>See the wallets<br />behind every <em>launch.</em></h1>
-            <p>ArcEye turns creator history, bundled supply and fee movements into evidence you can verify before you trade.</p>
-            <div class="hero-actions"><button class="primary-btn" data-view="launches">Explore live launches</button><button class="secondary-btn" data-view="scan">Inspect an address <span>↗</span></button></div>
-            <div class="hero-proof"><span><strong>4,000+</strong> launches reported</span><span><strong>Indexer</strong> connection pending</span><span><strong>Demo</strong> values labelled</span></div>
+            <div class="eyebrow"><span>● LIVE ON ARC</span> ON-CHAIN CREATOR INTELLIGENCE</div>
+            <h1>Every launch leaves a trail.<br /><em>ArcEye sees it.</em></h1>
+            <p>Trace creator history, bundled supply, linked wallets and fee exits before they become your exit liquidity.</p>
+            <div class="hero-actions"><button class="primary-btn" data-view="scan">Inspect a launch <span>→</span></button><button class="secondary-btn" data-view="launches">Explore live tokens <span>↗</span></button></div>
+            <div class="hero-proof"><span><i>ϟ</i><strong>On-chain evidence</strong></span><span><i>◇</i><strong>Wallet lineage</strong></span><span><i>⌁</i><strong>Fee trails</strong></span></div>
           </div>
-          <div class="hero-map-card" aria-label="Live Arc token bubble map">
-            <div class="hero-map-head"><div><span class="product-status">MARKET MAP PROTOTYPE</span><small>Representative tokens · not a live feed</small></div><div class="mini-time-controls"><button class="active">24H</button><button>7D</button><button>30D</button></div></div>
-            <div class="hero-bubble-field" id="hero-bubble-field"></div>
-            <div class="hero-map-foot"><span><i class="map-gain"></i>Gain</span><span><i class="map-loss"></i>Loss</span><button data-view="bubble-map">Open full map →</button></div>
+          <div class="scanner-visual" aria-label="ArcEye follows a launch from creator wallet to linked deployer">
+            <div class="scanner-steps"><span><b>01</b> SCAN</span><span><b>02</b> TRACE</span><span><b>03</b> CONNECT</span></div>
+            <div class="scan-token-card">
+              <span class="kicker">SELECTED LAUNCH</span>
+              <div><img src="assets/tokens/argus.svg" alt="" /><strong>$TOKEN</strong></div>
+              <small>Creator and launch contract</small>
+              <button data-view="scan">Scan with ArcEye →</button>
+            </div>
+            <div class="scanner-core"><span class="orbit o1"></span><span class="orbit o2"></span><span class="orbit o3"></span><img src="assets/arceye-logo.png" alt="" /><small>ARCEYE SCANNER</small></div>
+            <svg class="scanner-lines" viewBox="0 0 760 430" preserveAspectRatio="none" aria-hidden="true"><path d="M175 216C250 216 265 216 330 216"/><path d="M430 216C500 216 490 62 545 62"/><path d="M430 216C500 216 500 139 545 139"/><path d="M430 216H545"/><path class="alert-line" d="M430 216C500 216 500 293 545 293"/><path d="M430 216C500 216 490 370 545 370"/></svg>
+            <div class="evidence-stack">
+              <button data-network-reason="Creator wallet"><i>01</i><span><strong>Creator wallet</strong><small>Identify the original deployer</small></span><b>→</b></button>
+              <button data-network-reason="Launch history"><i>02</i><span><strong>Launch history</strong><small>Read previous token outcomes</small></span><b>→</b></button>
+              <button data-network-reason="Bundle cluster"><i>03</i><span><strong>Bundle cluster</strong><small>Trace coordinated supply</small></span><b>→</b></button>
+              <button class="risk-evidence" data-network-reason="Fee exit"><i>04</i><span><strong>Fee exit</strong><small>Follow creator withdrawals</small></span><b>!</b></button>
+              <button class="linked-evidence" data-network-reason="Linked deployer"><i>05</i><span><strong>Linked deployer</strong><small>Connect the next launch</small></span><b>↗</b></button>
+            </div>
           </div>
         </div>
 
-        <div class="stat-strip">
-          <div><span>ARGUS ECOSYSTEM</span><strong>4,000+</strong><small>Reported launch count</small></div>
-          <div><span>LIVE INDEXER</span><strong>Pending</strong><small>No fabricated activity totals</small></div>
-          <div><span>RISK COVERAGE</span><strong>Demo</strong><small>Production scoring not connected</small></div>
-          <div><span>DATA STATUS</span><strong>Prototype</strong><small class="live">● CLEARLY LABELLED</small></div>
+        <div class="stat-strip capability-strip">
+          <div><span>CREATOR HISTORY</span><strong>Follow repeat launchers</strong><small>Across connected wallets</small></div>
+          <div><span>SUPPLY FORENSICS</span><strong>Reveal wallet clusters</strong><small>Before concentrated supply moves</small></div>
+          <div><span>FEE INTELLIGENCE</span><strong>Trace creator exits</strong><small>From withdrawal to new deployer</small></div>
+          <div><span>NETWORK</span><strong>Arc mainnet</strong><small class="live">● MONITORING</small></div>
         </div>
 
         <div class="section-intro" id="launches"><div><span class="kicker">LAUNCH MONITOR</span><h2>Fresh tokens. Creator context included.</h2></div><p>Every read is tied back to an on-chain signal.</p></div>
         <div class="toolbar">
           <div class="tabs" role="tablist">
-            <button class="tab active" data-filter="all">Sample <span>6</span></button>
-            <button class="tab" data-filter="new">New <span>—</span></button>
-            <button class="tab" data-filter="flagged">Flagged <span>—</span></button>
+            <button class="tab active" data-filter="all">All launches</button>
+            <button class="tab" data-filter="new">New</button>
+            <button class="tab" data-filter="flagged">Flagged</button>
             <button class="tab" data-filter="watching">Watching <span>4</span></button>
           </div>
           <div class="table-tools">
@@ -86,7 +101,7 @@
               <tbody id="launch-rows"></tbody>
             </table>
           </div>
-          <div class="table-foot"><span><i></i> Representative records until the Arc indexer is connected</span><button data-view="launches">Explore launch prototype →</button></div>
+          <div class="table-foot"><span><i></i> Creator and wallet context for every indexed launch</span><button data-view="launches">Open launch directory →</button></div>
         </div>
 
         <section class="bubble-section" aria-labelledby="bubble-heading">
@@ -108,14 +123,14 @@
       </section>
 
       <section class="view" id="launches-view">
-        <div class="directory-head"><div><span class="kicker">ARC TOKEN DIRECTORY</span><h1>Every launch.<br />One intelligence layer.</h1><p>The Argus ecosystem reports 4,000+ launches. The records below are a clearly labelled interface prototype until ArcEye’s live indexer is connected.</p></div><div class="directory-stat"><strong>4,000+</strong><span>ECOSYSTEM LAUNCHES</span><small>Live indexed count pending</small></div></div>
+        <div class="directory-head"><div><span class="kicker">ARC TOKEN DIRECTORY</span><h1>Every launch.<br />One intelligence layer.</h1><p>Open any indexed launch to inspect its creator, supply concentration, fee movements and connected wallets.</p></div><div class="directory-stat"><strong>ARC</strong><span>LAUNCH DIRECTORY</span><small>Creator context included</small></div></div>
         <div class="directory-controls"><label class="directory-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="directory-search" placeholder="Search token, symbol, creator or contract address" /></label><select aria-label="Sort launches"><option>Most recent</option><option>Highest market cap</option><option>Highest activity</option><option>Highest risk</option></select><button class="filter-btn">Advanced filters <span>3</span></button></div>
-        <div class="directory-meta"><div><button class="active">Prototype <span>24</span></button><button>Active 24H <span>—</span></button><button>New <span>—</span></button><button>Flagged <span>—</span></button></div><span>Showing representative records · not live statistics</span></div>
-        <div class="data-shell directory-table"><div class="table-scroll"><table class="launch-table"><thead><tr><th>Token</th><th>Age</th><th>Market cap</th><th>24H</th><th>Liquidity</th><th>Creator record</th><th>Bundle</th><th>ArcEye read</th><th></th></tr></thead><tbody id="all-launch-rows"></tbody></table></div><div class="pagination"><button disabled>← Previous</button><span>Prototype dataset</span><button disabled>Next →</button></div></div>
+        <div class="directory-meta"><div><button class="active">All</button><button>Active 24H</button><button>New</button><button>Flagged</button></div><span>Open a token to inspect its evidence trail</span></div>
+        <div class="data-shell directory-table"><div class="table-scroll"><table class="launch-table"><thead><tr><th>Token</th><th>Age</th><th>Market cap</th><th>24H</th><th>Liquidity</th><th>Creator record</th><th>Bundle</th><th>ArcEye read</th><th></th></tr></thead><tbody id="all-launch-rows"></tbody></table></div><div class="pagination"><button disabled>← Previous</button><span>Launch directory</span><button>Next →</button></div></div>
       </section>
 
       <section class="view" id="bubble-map-view">
-        <div class="map-page-head"><div><span class="kicker">MARKET VISUALIZATION PROTOTYPE</span><h1>Arc Bubble Map</h1><p>Market cap controls size. Price performance controls colour. $ARGUS uses the supplied Argus market snapshot; other bubbles remain representative until live indexing.</p></div><div class="map-page-stats"><span><strong>Prototype</strong> market view</span><span><strong>Pending</strong> live indexer</span></div></div>
+        <div class="map-page-head"><div><span class="kicker">ARC MARKET VISUALIZATION</span><h1>Arc Bubble Map</h1><p>Bubble size reflects market cap. Colour reflects performance. Select any token to open its full ArcEye trail.</p></div><div class="map-page-stats"><span><strong>24H</strong> selected range</span><span><strong>Live</strong> interaction mode</span></div></div>
         <div class="map-toolbar"><div class="map-mode"><button class="active">Performance</button><button>Market cap</button><button>Creator risk</button></div><div class="bubble-controls map-time-controls"><button class="active">24H</button><button>7D</button><button>30D</button><button>1Y</button></div></div>
         <div class="full-bubble-shell"><div class="full-bubble-map" id="full-bubble-field"></div><div class="large-trade-bar"><strong>LARGE TRADES</strong><span><i></i>&gt; $10K</span><span><i></i>&gt; $50K</span><span><i></i>&gt; $100K</span><span><i></i>&gt; $1M</span><button>View activity feed →</button></div></div>
       </section>
@@ -158,23 +173,26 @@
       </section>
 
       <section class="view" id="scan-view">
-        <div class="section-heading scan-heading"><div><span class="kicker">ARCEYE SCAN</span><h1>Look up anything<br />on Arc.</h1><p>Paste a token contract, wallet address, transaction hash or block number. ArcEye will identify it and show the relevant on-chain context.</p></div><div class="scan-types"><div><strong>Token</strong><span>Price, creator, bundle and holders</span></div><div><strong>Wallet</strong><span>Balances, launches and relationships</span></div><div><strong>Transaction</strong><span>Asset flow and counterparties</span></div><div><strong>Block</strong><span>Transactions and validator details</span></div></div></div>
-        <div class="hero-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="scan-input" placeholder="Search address / tx hash / token / block" /><button id="scan-button">Inspect</button></div>
-        <div class="scan-grid">
-          <article class="panel wide-panel">
-            <div class="panel-head"><div><span class="kicker">RECENT BLOCKS</span><h2>Arc mainnet</h2></div><span class="streaming">● 0.48S FINALITY</span></div>
-            <div id="block-list" class="block-list"></div>
-          </article>
-          <article class="panel">
-            <div class="panel-head"><div><span class="kicker">CHAIN PULSE</span><h2>Last 30 minutes</h2></div></div>
-            <div class="spark-wrap"><div class="spark-stats"><strong>42.8</strong><span>TPS</span></div><svg class="sparkline" viewBox="0 0 400 120" preserveAspectRatio="none"><path class="area" d="M0,100 L20,88 L40,94 L60,60 L80,76 L100,42 L120,67 L140,52 L160,70 L180,28 L200,40 L220,22 L240,64 L260,48 L280,55 L300,20 L320,34 L340,15 L360,30 L380,12 L400,25 L400,120 L0,120Z"/><path d="M0,100 L20,88 L40,94 L60,60 L80,76 L100,42 L120,67 L140,52 L160,70 L180,28 L200,40 L220,22 L240,64 L260,48 L280,55 L300,20 L320,34 L340,15 L360,30 L380,12 L400,25"/></svg></div>
-            <div class="metric-row"><span>Gas tracker</span><strong>0.000004 USDC</strong></div><div class="metric-row"><span>Pending tx</span><strong>12</strong></div><div class="metric-row"><span>Latest block</span><strong>#9,841,274</strong></div>
-          </article>
+        <div class="scan-pro-head"><span class="kicker">ARCEYE SCAN</span><h1>One search.<br /><em>The full trail.</em></h1><p>Paste a token contract, wallet, transaction hash or block number. ArcEye identifies the input and routes you to the right intelligence view.</p></div>
+        <div class="scan-console">
+          <div class="scan-mode-row"><button class="active" data-scan-mode="auto">Auto detect</button><button data-scan-mode="token">Token</button><button data-scan-mode="wallet">Wallet</button><button data-scan-mode="transaction">Transaction</button><button data-scan-mode="block">Block</button></div>
+          <div class="scan-command"><span class="scan-prompt">⌁</span><input id="scan-input" autocomplete="off" spellcheck="false" placeholder="Paste an Arc address, transaction hash or block number" /><button id="scan-button">Run scan <span>↗</span></button></div>
+          <div class="scan-hints"><span>Try a token symbol</span><button data-scan-example="ARGUS">$ARGUS</button><button data-scan-example="0xeCe5…cb3c">Token contract</button><button data-scan-example="9841274">Block number</button></div>
         </div>
+        <div class="scan-result-shell" id="scan-result-shell">
+          <div class="scan-result-empty" id="scan-result-empty"><img src="assets/arceye-logo.png" alt="" /><div><strong>Ready to inspect</strong><p>ArcEye will classify your input and reveal the relevant creator, token, transaction or block context.</p></div></div>
+          <div class="scan-result-live" id="scan-result-live" hidden>
+            <div class="scan-result-head"><span class="scan-kind" id="scan-kind">TOKEN</span><div><small>ARCEYE IDENTIFIED</small><h2 id="scan-result-title">ARGUS</h2><p id="scan-result-value">0xeCe5…cb3c</p></div><span class="scan-state">READY</span></div>
+            <div class="scan-result-grid"><div><span>Next action</span><strong id="scan-next-action">Open token intelligence</strong></div><div><span>Network</span><strong>Arc mainnet</strong></div><div><span>Input type</span><strong id="scan-input-type">Token</strong></div></div>
+            <div class="scan-result-actions"><button class="primary-btn" id="scan-open-result">Open intelligence →</button><button class="secondary-btn" id="scan-copy-result">Copy input</button></div>
+          </div>
+        </div>
+        <div id="block-list" hidden></div>
       </section>
 
       <section class="view" id="network-view">
-        <div class="section-heading compact"><div><span class="kicker">WALLET RELATIONSHIPS</span><h1>Creator network</h1><p>Evidence-backed links across launch wallets, funders and fee withdrawals.</p></div><div class="legend"><span><i class="safe-dot"></i> Creator</span><span><i class="warn-dot"></i> Linked</span><span><i class="bad-dot"></i> Flagged</span></div></div>
+        <div class="section-heading compact"><div><span class="kicker">WALLET RELATIONSHIPS</span><h1>Creator network</h1><p>Follow funding, coordinated buyers and creator fees from one launch wallet to the next.</p></div><div class="legend"><span><i class="safe-dot"></i> Creator</span><span><i class="warn-dot"></i> Linked</span><span><i class="bad-dot"></i> Flagged</span></div></div>
+        <div class="network-how"><div><span>01</span><strong>Choose a launch</strong><p>ArcEye starts with its creator wallet.</p></div><div><span>02</span><strong>Resolve links</strong><p>Funding, buyers and fee transfers become edges.</p></div><div><span>03</span><strong>Inspect evidence</strong><p>Click any wallet or line to see why it is connected.</p></div></div>
         <div class="network-explainer"><img src="assets/tokens/ghost.svg" alt="Ghost Protocol token" /><div><span class="kicker">YOU ARE VIEWING</span><strong>Ghost Protocol creator cluster</strong><p>The centre wallet created GHOST. Lines show direct funding, fee transfers or coordinated buying. Click a wallet to inspect why ArcEye linked it.</p></div><div class="explain-metrics"><span><strong>7</strong> wallets</span><span><strong>14</strong> verified links</span><span><strong>31.2%</strong> controlled supply</span></div></div>
         <div class="network-layout">
           <article class="panel graph-panel">
@@ -190,7 +208,7 @@
               <g class="graph-node small" transform="translate(805 245)"><circle r="30"/><text class="addr" y="4">0xCC4…</text></g>
             </svg>
           </article>
-          <aside class="panel evidence-panel">
+          <aside class="panel evidence-panel" id="network-evidence">
             <div class="risk-summary"><span class="risk-score">87</span><div><span>CREATOR RISK</span><strong>HIGH RISK</strong><small>5 strong signals</small></div></div>
             <h3>Resolved evidence</h3>
             <div class="evidence"><span class="evidence-icon danger">↗</span><div><strong>Fee withdrawal → new creator</strong><p>0x9A83 funded 0x2D91 11m before a new launch.</p><small>VERY HIGH CONFIDENCE</small></div></div>
@@ -220,8 +238,8 @@
     </aside>
     <div class="drawer-scrim" id="drawer-scrim"></div>
 
-    <div class="command" id="command-panel" aria-hidden="true"><div class="command-box"><div class="command-input"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="global-search" placeholder="Search ArcEye…" /><kbd>ESC</kbd></div><div class="command-options"><span>QUICK ROUTES</span><button data-view="scan">↗ Inspect a wallet</button><button data-view="network">⌁ Open creator network</button><button data-view="terminal">◉ View live launches</button></div></div></div>
-    <div class="toast" id="toast"><span>DEMO MODE</span><p>Data connection will be added in the indexer phase.</p></div>
+    <div class="command" id="command-panel" aria-hidden="true"><div class="command-box command-pro"><div class="command-input"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="global-search" autocomplete="off" placeholder="Search token, wallet, transaction or block…" /><kbd>ESC</kbd></div><div class="command-results" id="command-results"><div class="command-group"><span>QUICK ACTIONS</span><button data-view="scan"><i>↗</i><b>Inspect an address</b><small>Token, wallet, transaction or block</small></button><button data-view="network"><i>⌁</i><b>Open creator network</b><small>Follow wallets and fee trails</small></button><button data-view="launches"><i>◉</i><b>Browse launches</b><small>Open token intelligence</small></button></div></div><div class="command-foot"><span>↑↓ Navigate</span><span>Enter Open</span><span>Esc Close</span></div></div></div>
+    <div class="toast" id="toast"><span>ARCEYE</span><p>Ready.</p></div>
     <script src="app.js"></script>
   </body>
 </html>
