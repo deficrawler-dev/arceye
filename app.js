@@ -83,7 +83,7 @@ function bubbleMarkup(tokens,variant="full"){
 }
 document.querySelector("#full-bubble-field").innerHTML=bubbleMarkup(marketTokens);
 document.querySelector("#home-bubble-field").innerHTML=bubbleMarkup(marketTokens.slice(0,21),"home");
-document.querySelector("#hero-bubble-field").innerHTML=bubbleMarkup(marketTokens.slice(0,15),"hero");
+document.querySelector("#hero-bubble-field")?.replaceChildren();
 
 const rowRoot=document.querySelector("#launch-rows");
 function tokenRowMarkup(x){const displayAddress=x.address||`0x${Math.random().toString(16).slice(2,8)}…${Math.random().toString(16).slice(2,6)}`;return `<tr data-token="${x.symbol}"><td><div class="token-cell"><img class="token-icon" src="${x.image}" alt="${x.name} token" /><div><strong>${x.symbol} · ${x.name}</strong><small>${displayAddress}</small></div></div></td><td class="mono">${x.age}</td><td class="mono">${x.cap}</td><td class="mono change ${String(x.change).startsWith("+")?"up":"down"}">${x.change}</td><td class="mono">${x.liq}</td><td><span class="record">${x.record}<small class="${x.dead.startsWith("0")?"":"death"}">${x.dead}</small></span></td><td class="mono">${x.bundle}</td><td><span class="risk-pill ${x.risk}">${x.label}</span></td><td class="row-open">›</td></tr>`}
@@ -166,10 +166,34 @@ document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key==="k"){
 
 function openDrawer(){document.querySelector("#tx-drawer").classList.add("open");document.querySelector("#drawer-scrim").classList.add("open");document.querySelector("#tx-drawer").setAttribute("aria-hidden","false")}
 function closeDrawer(){document.querySelector("#tx-drawer").classList.remove("open");document.querySelector("#drawer-scrim").classList.remove("open");document.querySelector("#tx-drawer").setAttribute("aria-hidden","true")}
-function inspect(){const input=document.querySelector("#scan-input");if(!input.value.trim()){input.focus();showToast("Paste a token, wallet, transaction or block to inspect.");return}openDrawer()}
+let detectedScan={type:"",value:""};
+function detectInput(value){
+  const raw=value.trim();
+  if(!raw)return null;
+  if(/^\d+$/.test(raw))return {type:"Block",kind:"BLOCK",title:`Block #${raw}`,action:"Inspect block transactions",view:"scan"};
+  if(/^0x[a-fA-F0-9]{64}$/.test(raw))return {type:"Transaction",kind:"TRANSACTION",title:"Transaction",action:"Trace asset flow",view:"scan"};
+  if(/^0x[a-fA-F0-9]{40}$/.test(raw)||raw.includes("…"))return {type:"Address",kind:"ADDRESS",title:"Arc address",action:"Open wallet intelligence",view:"network"};
+  const token=directoryTokens.find(item=>item.symbol.toLowerCase()===raw.replace("$","").toLowerCase()||item.name.toLowerCase().includes(raw.toLowerCase()));
+  if(token)return {type:"Token",kind:"TOKEN",title:`${token.symbol} · ${token.name}`,action:"Open token intelligence",view:"token",symbol:token.symbol};
+  return {type:"Search",kind:"SEARCH",title:raw.toUpperCase(),action:"Search Arc launches",view:"launches"};
+}
+function inspect(){
+  const input=document.querySelector("#scan-input"),result=detectInput(input.value);
+  if(!result){input.focus();showToast("Paste a token, wallet, transaction or block to inspect.");return}
+  detectedScan={...result,value:input.value.trim()};
+  document.querySelector("#scan-result-empty").hidden=true;document.querySelector("#scan-result-live").hidden=false;
+  document.querySelector("#scan-kind").textContent=result.kind;document.querySelector("#scan-result-title").textContent=result.title;
+  document.querySelector("#scan-result-value").textContent=input.value.trim();document.querySelector("#scan-input-type").textContent=result.type;
+  document.querySelector("#scan-next-action").textContent=result.action;document.querySelector("#scan-result-shell").classList.add("has-result");
+}
 document.querySelector("#scan-button").addEventListener("click",inspect);document.querySelector("#scan-input").addEventListener("keydown",e=>{if(e.key==="Enter")inspect()});
+document.querySelectorAll("[data-scan-example]").forEach(button=>button.addEventListener("click",()=>{document.querySelector("#scan-input").value=button.dataset.scanExample;inspect()}));
+document.querySelectorAll("[data-scan-mode]").forEach(button=>button.addEventListener("click",()=>{document.querySelectorAll("[data-scan-mode]").forEach(item=>item.classList.remove("active"));button.classList.add("active");document.querySelector("#scan-input").focus()}));
+document.querySelector("#scan-open-result").addEventListener("click",()=>{if(detectedScan.symbol)openToken(detectedScan.symbol);else changeView(detectedScan.view||"scan")});
+document.querySelector("#scan-copy-result").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(detectedScan.value);showToast("Input copied.")}catch{showToast(detectedScan.value)}});
+document.querySelectorAll(".evidence-stack button").forEach(button=>button.addEventListener("click",()=>{changeView("network");setTimeout(()=>showToast(`${button.dataset.networkReason}: relationship view opened.`),250)}));
 document.querySelectorAll(".wallet-btn,.empty-state .primary-btn").forEach(b=>b.addEventListener("click",()=>showToast("Wallet connection will activate with the Arc data layer.")));
-document.querySelectorAll(".graph-node").forEach(n=>n.addEventListener("click",()=>showToast(`Selected ${n.dataset.wallet||"linked wallet"}`)));
+document.querySelectorAll(".graph-node").forEach(node=>node.addEventListener("click",()=>{document.querySelectorAll(".graph-node").forEach(item=>item.classList.remove("selected"));node.classList.add("selected");const wallet=node.dataset.wallet||"linked wallet";const panel=document.querySelector("#network-evidence");panel.querySelector("h3").textContent="Selected wallet evidence";panel.querySelector(".evidence p").textContent=`${wallet} is connected through the highlighted money-flow path. Switch relationship modes to inspect funding, launch lineage or shared buyers.`;showToast(`Selected ${wallet}`)}));
 document.querySelectorAll("[data-detail-tab]").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll("[data-detail-tab]").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".detail-pane").forEach(p=>p.classList.remove("active"));tab.classList.add("active");document.querySelector(`#${tab.dataset.detailTab}-pane`).classList.add("active")}));
 document.querySelectorAll(".open-creator").forEach(button=>button.addEventListener("click",()=>changeView("creator")));
 document.querySelectorAll(".watch-toggle").forEach(button=>button.addEventListener("click",()=>{const watched=button.classList.toggle("active");button.textContent=watched?"✓ Watching":"+ Watch";showToast(watched?"Added to your ArcEye watchlist.":"Removed from your watchlist.")}));
@@ -178,4 +202,17 @@ document.querySelectorAll(".block-row,.trade-row").forEach(row=>row.addEventList
 document.querySelector("#close-drawer").addEventListener("click",closeDrawer);document.querySelector("#drawer-scrim").addEventListener("click",closeDrawer);
 
 let toastTimer;function showToast(message){const toast=document.querySelector("#toast");toast.querySelector("p").textContent=message;toast.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove("show"),3200)}
-setTimeout(()=>showToast("Prototype online. Live indexer pending; demo values are labelled."),900);
+setTimeout(()=>showToast("ArcEye intelligence interface ready."),900);
+
+const globalSearch=document.querySelector("#global-search"),commandResults=document.querySelector("#command-results");
+const quickCommandHTML=commandResults.innerHTML;
+function renderCommandResults(query){
+  const q=query.trim().toLowerCase();if(!q){commandResults.innerHTML=quickCommandHTML;bindCommandRoutes();return}
+  const tokens=directoryTokens.filter(item=>`${item.symbol} ${item.name}`.toLowerCase().includes(q)).slice(0,5);
+  const walletMatch=q.startsWith("0x");
+  commandResults.innerHTML=`<div class="command-group"><span>RESULTS</span>${tokens.map(token=>`<button data-command-token="${token.symbol}"><img src="${token.image}" alt=""/><b>${token.symbol} · ${token.name}</b><small>${token.cap} · Open intelligence</small></button>`).join("")}${walletMatch?`<button data-command-wallet="${query}"><i>⌁</i><b>Inspect wallet or transaction</b><small>${query}</small></button>`:""}${!tokens.length&&!walletMatch?`<button data-command-scan="${query}"><i>↗</i><b>Scan “${query}”</b><small>Search across ArcEye</small></button>`:""}</div>`;
+  commandResults.querySelectorAll("[data-command-token]").forEach(button=>button.addEventListener("click",()=>openToken(button.dataset.commandToken)));
+  commandResults.querySelectorAll("[data-command-wallet],[data-command-scan]").forEach(button=>button.addEventListener("click",()=>{document.querySelector("#scan-input").value=button.dataset.commandWallet||button.dataset.commandScan;changeView("scan");inspect()}));
+}
+function bindCommandRoutes(){commandResults.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>changeView(button.dataset.view)))}
+globalSearch.addEventListener("input",event=>renderCommandResults(event.target.value));bindCommandRoutes();
