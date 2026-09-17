@@ -93,7 +93,7 @@ document.querySelector("#hero-bubble-field")?.replaceChildren();
 const heroTokenPool=directoryTokens.filter(token=>token.symbol&&token.image);
 let heroTokenIndex=0;
 function rotateHeroToken(){
-  const token=heroTokenPool[heroTokenIndex%heroTokenPool.length];heroTokenIndex+=1;
+  let nextIndex=Math.floor(Math.random()*heroTokenPool.length);if(heroTokenPool.length>1&&nextIndex===heroTokenIndex)nextIndex=(nextIndex+1)%heroTokenPool.length;heroTokenIndex=nextIndex;const token=heroTokenPool[heroTokenIndex];
   const card=document.querySelector(".scan-token-card");if(!card)return;
   card.classList.add("switching");
   setTimeout(()=>{document.querySelector("#hero-token-image").src=token.image;document.querySelector("#hero-token-symbol").textContent=`${token.symbol}`;document.querySelector("#hero-token-name").textContent=token.name;document.querySelector("#hero-token-address").textContent=token.address||`Arc launch · ${token.age}`;card.classList.remove("switching")},180);
