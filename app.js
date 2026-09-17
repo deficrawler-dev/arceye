@@ -33,7 +33,7 @@ const trades=[
   ["BUY","$1,842","0xF28…81C","now"],["BUY","$420","0x30A…912","2s"],["SELL","$2,119","0xA18…0F2","4s"],["BUY","$718","0x98C…7DE","7s"],["BUY","$3,201","0x44B…11A","11s"],["SELL","$890","0x7D1…8C4","14s"]
 ];
 const marketTokens=[
-  {symbol:"ARGUS",image:"assets/tokens/argus.svg",change:"+13.8%",cap:"$17.6M",tone:"gain",x:50,y:49,s:154},
+  {symbol:"ARGUS",image:"assets/tokens/argus.svg",change:"−35.1%",cap:"$15.03M",tone:"loss",x:50,y:49,s:154},
   {symbol:"VOLT",image:"assets/tokens/volt.svg",change:"+182%",cap:"$84K",tone:"gain",x:7,y:15,s:105},
   {symbol:"GHOST",image:"assets/tokens/ghost.svg",change:"+74.8%",cap:"$211K",tone:"gain",x:19,y:19,s:82},
   {symbol:"KERN",image:"assets/tokens/kern.svg",change:"−12.4%",cap:"$47K",tone:"loss",x:30,y:10,s:68},
@@ -66,8 +66,15 @@ const directoryNames=["ARGUS","VOLT","GHOST","KERN","ARCX","MINT","NOVA","WAVE",
 const directoryTokens=directoryNames.map((symbol,index)=>{
   const market=marketTokens.find(token=>token.symbol===symbol)||marketTokens[index%marketTokens.length];
   const source=launches.find(token=>token.symbol===symbol)||launches[index%launches.length];
-  const names={ARGUS:"Argus Native",SCOUT:"Jeremy's Dog",WAVE:"Arc Wave",WLD:"World Ledger",CRO:"Crow Protocol",STABLE:"Stable Arc",LINK:"Arc Link",POL:"Polygon Relay",CAKE:"Cake House",NEAR:"Near Arc",ENA:"Enara",PUMP:"Arc Pump",SUI:"Sui Bridge",UNI:"Uni Arc",PEPE:"Pepe on Arc",SOL:"Solar Arc",RAIN:"Purple Rain",JUP:"Jupiter Arc"};
+  const names={ARGUS:"Argus",SCOUT:"Jeremy's Dog",WAVE:"Arc Wave",WLD:"World Ledger",CRO:"Crow Protocol",STABLE:"Stable Arc",LINK:"Arc Link",POL:"Polygon Relay",CAKE:"Cake House",NEAR:"Near Arc",ENA:"Enara",PUMP:"Arc Pump",SUI:"Sui Bridge",UNI:"Uni Arc",PEPE:"Pepe on Arc",SOL:"Solar Arc",RAIN:"Purple Rain",JUP:"Jupiter Arc"};
   return {...source,symbol,image:market.image,name:names[symbol]||source.name,age:index<6?source.age:`${index+1}h`,cap:market.cap,change:market.change,liq:`$${(18+index*3.7).toFixed(1)}K`,bundle:`${(2.1+(index%7)*3.4).toFixed(1)}%`};
+});
+const argusToken=directoryTokens.find(token=>token.symbol==="ARGUS");
+Object.assign(argusToken,{
+  name:"Argus",age:"14d",cap:"$15.03M",change:"−35.1%",changePeriod:"24H",price:"$0.015",liq:"Not indexed",pair:"ARGUS / USDC",
+  address:"0xeCe5…cb3c",fullAddress:"0xeCe5ca8bf9220718e5727754026757512212",creator:"0x7d61…beE4",launched:"Launched 14 days ago",
+  creatorHolding:"—",creatorNote:"Awaiting holder index",bundle:"—",bundleNote:"Awaiting bundle analysis",score:"Not assessed",
+  scoreNote:"Native ecosystem token",risk:"medium",label:"NATIVE",verifiedSnapshot:true
 });
 
 function bubbleMarkup(tokens,variant="full"){
@@ -79,7 +86,7 @@ document.querySelector("#home-bubble-field").innerHTML=bubbleMarkup(marketTokens
 document.querySelector("#hero-bubble-field").innerHTML=bubbleMarkup(marketTokens.slice(0,15),"hero");
 
 const rowRoot=document.querySelector("#launch-rows");
-function tokenRowMarkup(x){return `<tr data-token="${x.symbol}"><td><div class="token-cell"><img class="token-icon" src="${x.image}" alt="${x.name} token" /><div><strong>${x.symbol} · ${x.name}</strong><small>0x${Math.random().toString(16).slice(2,8)}…${Math.random().toString(16).slice(2,6)}</small></div></div></td><td class="mono">${x.age}</td><td class="mono">${x.cap}</td><td class="mono change ${String(x.change).startsWith("+")?"up":"down"}">${x.change}</td><td class="mono">${x.liq}</td><td><span class="record">${x.record}<small class="${x.dead.startsWith("0")?"":"death"}">${x.dead}</small></span></td><td class="mono">${x.bundle}</td><td><span class="risk-pill ${x.risk}">${x.label}</span></td><td class="row-open">›</td></tr>`}
+function tokenRowMarkup(x){const displayAddress=x.address||`0x${Math.random().toString(16).slice(2,8)}…${Math.random().toString(16).slice(2,6)}`;return `<tr data-token="${x.symbol}"><td><div class="token-cell"><img class="token-icon" src="${x.image}" alt="${x.name} token" /><div><strong>${x.symbol} · ${x.name}</strong><small>${displayAddress}</small></div></div></td><td class="mono">${x.age}</td><td class="mono">${x.cap}</td><td class="mono change ${String(x.change).startsWith("+")?"up":"down"}">${x.change}</td><td class="mono">${x.liq}</td><td><span class="record">${x.record}<small class="${x.dead.startsWith("0")?"":"death"}">${x.dead}</small></span></td><td class="mono">${x.bundle}</td><td><span class="risk-pill ${x.risk}">${x.label}</span></td><td class="row-open">›</td></tr>`}
 function renderLaunches(filter="all",query=""){
   const normalized=query.toLowerCase();
   const items=launches.filter(x=>(filter==="all"||x.tags.includes(filter))&&(`${x.symbol} ${x.name} ${x.label}`.toLowerCase().includes(normalized)));
@@ -102,13 +109,34 @@ document.querySelector("#farmer-token-list").innerHTML=creatorLaunches.concat(cr
 
 function openToken(symbol){
   const token=directoryTokens.find(x=>x.symbol===symbol)||launches.find(x=>x.symbol===symbol)||launches[1];
-  document.querySelector("#detail-symbol").textContent=token.symbol;
-  document.querySelector("#detail-icon").src=token.image;
-  document.querySelector("#detail-icon").alt=`${token.name} token`;
-  document.querySelector("#detail-name").textContent=token.name;
-  document.querySelector("#detail-ticker").textContent=token.symbol;
-  document.querySelector("#detail-cap").textContent=token.cap;
-  const risk=document.querySelector("#detail-risk");risk.textContent=token.label;risk.className=`risk-pill ${token.risk}`;
+  const native=Boolean(token.verifiedSnapshot);
+  const set=(selector,value)=>{const node=document.querySelector(selector);if(node)node.textContent=value};
+  set("#detail-symbol",token.symbol);
+  const icon=document.querySelector("#detail-icon");icon.src=token.image;icon.alt=`${token.name} token`;
+  set("#detail-name",token.name);set("#detail-ticker",token.symbol);set("#detail-cap",token.cap);
+  set("#detail-change",`${token.change} ${token.changePeriod||"1H"}`);
+  document.querySelector("#detail-change").className=String(token.change).startsWith("+")?"up":"down";
+  set("#detail-liquidity",native?"Not indexed":token.liq);set("#detail-pair",token.pair||`USDC / ${token.symbol}`);
+  set("#detail-creator-holding",native?"—":"8.4%");set("#detail-creator-note",native?"Awaiting holder index":"3 linked wallets");
+  set("#detail-bundle",native?"—":token.bundle);set("#detail-bundle-note",native?"Awaiting bundle analysis":"Prototype estimate");
+  set("#detail-score",native?"Not assessed":"87 / 100");set("#detail-score-note",native?"Native ecosystem token":"Prototype score");
+  set("#detail-chart-pair",token.pair||`${token.symbol} / USDC`);set("#detail-price",token.price||"Prototype");set("#detail-price-change",token.change);
+  document.querySelector("#detail-price-change").className=String(token.change).startsWith("+")?"up":"down";
+  const address=document.querySelector("#detail-address");address.textContent=token.address||"Prototype CA";address.dataset.address=token.fullAddress||token.address||"";
+  set("#detail-launch-meta",token.launched||"Launched via Argus");
+  const risk=document.querySelector("#detail-risk");risk.textContent=native?"NATIVE":token.label;risk.className=`risk-pill ${native?"medium":token.risk}`;
+  set("#detail-verdict-score",native?"—":"87");set("#detail-verdict-kicker",native?"DATA STATUS":"ARCEYE VERDICT");
+  set("#detail-verdict-title",native?"Market snapshot only":"Proceed with caution");
+  set("#detail-verdict-copy",native?"The market cap, 24-hour change, price, launch age and shortened addresses shown here come from the Argus screenshot you supplied. Creator holdings, bundle analysis and ArcEye risk scoring are intentionally left unscored until a live on-chain indexer is connected.":"This is representative prototype intelligence, not a live on-chain assessment.");
+  document.querySelector("#detail-signals").innerHTML=native
+    ? `<div><span class="safe-dot"></span><strong>Market cap</strong><small>$15.03M supplied snapshot</small></div><div><span class="bad-dot"></span><strong>24H performance</strong><small>−35.1% supplied snapshot</small></div><div><span class="warn-dot"></span><strong>Creator analysis</strong><small>Awaiting live indexer</small></div><div><span class="warn-dot"></span><strong>Bundle analysis</strong><small>Awaiting live indexer</small></div>`
+    : `<div><span class="warn-dot"></span><strong>Prototype record</strong><small>Not connected to live chain data</small></div><div><span class="warn-dot"></span><strong>Creator analysis</strong><small>Representative interface value</small></div>`;
+  document.querySelector("#detail-secondary-intel").hidden=native;
+  document.querySelectorAll("[data-detail-tab]").forEach(tab=>{tab.hidden=native&&tab.dataset.detailTab!=="overview";tab.classList.toggle("active",tab.dataset.detailTab==="overview")});
+  document.querySelectorAll(".detail-pane").forEach(pane=>pane.classList.toggle("active",pane.id==="overview-pane"));
+  const downPath="M0 25L35 30L70 45L105 38L140 70L175 64L210 92L245 82L280 110L315 102L350 135L385 126L420 155L455 146L490 175L525 165L560 192L595 183L630 208L665 198L700 224L735 214L770 235L805 226L840 244L875 232L900 240";
+  const upPath="M0 220L35 211L70 218L105 190L140 198L175 175L210 181L245 154L280 165L315 139L350 148L385 111L420 126L455 96L490 102L525 72L560 91L595 62L630 70L665 38L700 56L735 31L770 42L805 17L840 28L875 11L900 21";
+  const path=native?downPath:upPath;document.querySelector(".price-line").setAttribute("d",path);document.querySelector(".price-area").setAttribute("d",`${path}V260H0Z`);
   changeView("token");
 }
 
@@ -145,9 +173,9 @@ document.querySelectorAll(".graph-node").forEach(n=>n.addEventListener("click",(
 document.querySelectorAll("[data-detail-tab]").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll("[data-detail-tab]").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".detail-pane").forEach(p=>p.classList.remove("active"));tab.classList.add("active");document.querySelector(`#${tab.dataset.detailTab}-pane`).classList.add("active")}));
 document.querySelectorAll(".open-creator").forEach(button=>button.addEventListener("click",()=>changeView("creator")));
 document.querySelectorAll(".watch-toggle").forEach(button=>button.addEventListener("click",()=>{const watched=button.classList.toggle("active");button.textContent=watched?"✓ Watching":"+ Watch";showToast(watched?"Added to your ArcEye watchlist.":"Removed from your watchlist.")}));
-document.querySelectorAll(".copy-address").forEach(button=>button.addEventListener("click",async()=>{try{await navigator.clipboard.writeText("0xbd8a7ea8cfca7b4e5f5041d7d4b17bc317c5ce42cfbc42066a00cf26b43eb53f");showToast("Address copied to clipboard.")}catch{showToast("0xbd8a7e…eb53f")}}));
+document.querySelectorAll(".copy-address").forEach(button=>button.addEventListener("click",async()=>{const value=button.dataset.address||button.textContent.trim();try{await navigator.clipboard.writeText(value);showToast("Address copied to clipboard.")}catch{showToast(value)}}));
 document.querySelectorAll(".block-row,.trade-row").forEach(row=>row.addEventListener("click",openDrawer));
 document.querySelector("#close-drawer").addEventListener("click",closeDrawer);document.querySelector("#drawer-scrim").addEventListener("click",closeDrawer);
 
 let toastTimer;function showToast(message){const toast=document.querySelector("#toast");toast.querySelector("p").textContent=message;toast.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove("show"),3200)}
-setTimeout(()=>showToast("Prototype online. On-chain values are representative data."),900);
+setTimeout(()=>showToast("Prototype online. Live indexer pending; demo values are labelled."),900);
