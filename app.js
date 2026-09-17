@@ -72,7 +72,7 @@ const directoryTokens=directoryNames.map((symbol,index)=>{
 const argusToken=directoryTokens.find(token=>token.symbol==="ARGUS");
 Object.assign(argusToken,{
   name:"Argus",age:"14d",cap:"$15.03M",change:"−35.1%",changePeriod:"24H",price:"$0.015",liq:"Not indexed",pair:"ARGUS / USDC",
-  address:"0xeCe5…cb3c",fullAddress:"0xeCe5ca8bf9220718e5727754026757512212",creator:"0x7d61…beE4",launched:"Launched 14 days ago",
+  address:"0xeCe5…cb3c",fullAddress:"",creator:"0x7d61…beE4",launched:"Launched 14 days ago",
   creatorHolding:"—",creatorNote:"Awaiting holder index",bundle:"—",bundleNote:"Awaiting bundle analysis",score:"Not assessed",
   scoreNote:"Native ecosystem token",risk:"medium",label:"NATIVE",verifiedSnapshot:true
 });
@@ -122,7 +122,7 @@ function openToken(symbol){
   set("#detail-score",native?"Not assessed":"87 / 100");set("#detail-score-note",native?"Native ecosystem token":"Prototype score");
   set("#detail-chart-pair",token.pair||`${token.symbol} / USDC`);set("#detail-price",token.price||"Prototype");set("#detail-price-change",token.change);
   document.querySelector("#detail-price-change").className=String(token.change).startsWith("+")?"up":"down";
-  const address=document.querySelector("#detail-address");address.textContent=token.address||"Prototype CA";address.dataset.address=token.fullAddress||token.address||"";
+  const address=document.querySelector("#detail-address");address.textContent=token.address||"Prototype CA";address.dataset.address=token.fullAddress||"";address.title=token.fullAddress?"Copy contract address":"Full contract address requires live indexing";
   set("#detail-launch-meta",token.launched||"Launched via Argus");
   const risk=document.querySelector("#detail-risk");risk.textContent=native?"NATIVE":token.label;risk.className=`risk-pill ${native?"medium":token.risk}`;
   set("#detail-verdict-score",native?"—":"87");set("#detail-verdict-kicker",native?"DATA STATUS":"ARCEYE VERDICT");
@@ -173,7 +173,7 @@ document.querySelectorAll(".graph-node").forEach(n=>n.addEventListener("click",(
 document.querySelectorAll("[data-detail-tab]").forEach(tab=>tab.addEventListener("click",()=>{document.querySelectorAll("[data-detail-tab]").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".detail-pane").forEach(p=>p.classList.remove("active"));tab.classList.add("active");document.querySelector(`#${tab.dataset.detailTab}-pane`).classList.add("active")}));
 document.querySelectorAll(".open-creator").forEach(button=>button.addEventListener("click",()=>changeView("creator")));
 document.querySelectorAll(".watch-toggle").forEach(button=>button.addEventListener("click",()=>{const watched=button.classList.toggle("active");button.textContent=watched?"✓ Watching":"+ Watch";showToast(watched?"Added to your ArcEye watchlist.":"Removed from your watchlist.")}));
-document.querySelectorAll(".copy-address").forEach(button=>button.addEventListener("click",async()=>{const value=button.dataset.address||button.textContent.trim();try{await navigator.clipboard.writeText(value);showToast("Address copied to clipboard.")}catch{showToast(value)}}));
+document.querySelectorAll(".copy-address").forEach(button=>button.addEventListener("click",async()=>{const value=button.dataset.address;if(!value){showToast("Full contract address requires the live indexer.");return}try{await navigator.clipboard.writeText(value);showToast("Address copied to clipboard.")}catch{showToast(value)}}));
 document.querySelectorAll(".block-row,.trade-row").forEach(row=>row.addEventListener("click",openDrawer));
 document.querySelector("#close-drawer").addEventListener("click",closeDrawer);document.querySelector("#drawer-scrim").addEventListener("click",closeDrawer);
 
