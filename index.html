@@ -20,6 +20,8 @@
       </a>
       <nav class="main-nav" aria-label="Primary navigation">
         <button class="nav-item active" data-view="terminal">Terminal</button>
+        <button class="nav-item" data-view="launches">Launches</button>
+        <button class="nav-item" data-view="bubble-map">Bubble Map</button>
         <button class="nav-item" data-view="scan">Scan</button>
         <button class="nav-item" data-view="network">Network</button>
         <button class="nav-item" data-view="watchlist">Watchlist <span class="nav-count">4</span></button>
@@ -27,14 +29,15 @@
       <div class="top-actions">
         <div class="chain-status"><span></span> ARC MAINNET</div>
         <button class="icon-btn search-trigger" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg></button>
-        <button class="wallet-btn">Connect wallet</button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light theme"><svg viewBox="0 0 24 24"><path d="M20 15.2A8.2 8.2 0 1 1 8.8 4a6.7 6.7 0 0 0 11.2 11.2Z"></path></svg></button>
+        <button class="wallet-btn"><svg viewBox="0 0 24 24"><path d="M4 7h14a2 2 0 0 1 2 2v9H6a2 2 0 0 1-2-2V7Zm0 0V5a2 2 0 0 1 2-2h10v4m1 5h3"></path><circle cx="16.5" cy="12" r="1"></circle></svg>Connect wallet</button>
         <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
       </div>
     </header>
     <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
       <div class="mobile-menu-head"><a class="brand" href="#" data-view="terminal"><img src="assets/arceye-logo.png" alt="" /><span>ArcEye</span></a><button id="menu-close" aria-label="Close menu">×</button></div>
-      <nav aria-label="Mobile navigation"><button class="mobile-nav-item active" data-view="terminal"><span>01</span>Terminal <i>Live launches</i></button><button class="mobile-nav-item" data-view="scan"><span>02</span>ArcEye Scan <i>Tokens, wallets &amp; blocks</i></button><button class="mobile-nav-item" data-view="network"><span>03</span>Creator network <i>Wallet relationships</i></button><button class="mobile-nav-item" data-view="watchlist"><span>04</span>Watchlist <i>4 monitored signals</i></button></nav>
-      <div class="mobile-menu-foot"><div><span></span>Arc mainnet connected</div><button class="wallet-btn">Connect wallet</button></div>
+      <nav aria-label="Mobile navigation"><button class="mobile-nav-item active" data-view="terminal"><span>01</span>Terminal <i>Market overview</i></button><button class="mobile-nav-item" data-view="launches"><span>02</span>All launches <i>4,086 indexed tokens</i></button><button class="mobile-nav-item" data-view="bubble-map"><span>03</span>Bubble Map <i>Live token performance</i></button><button class="mobile-nav-item" data-view="scan"><span>04</span>ArcEye Scan <i>Tokens, wallets &amp; blocks</i></button><button class="mobile-nav-item" data-view="network"><span>05</span>Creator network <i>Wallet relationships</i></button><button class="mobile-nav-item" data-view="watchlist"><span>06</span>Watchlist <i>4 monitored signals</i></button></nav>
+      <div class="mobile-menu-foot"><div><span></span>Arc mainnet connected</div><div class="mobile-foot-actions"><button class="mobile-theme-toggle" id="mobile-theme-toggle" aria-label="Switch theme"><svg viewBox="0 0 24 24"><path d="M20 15.2A8.2 8.2 0 1 1 8.8 4a6.7 6.7 0 0 0 11.2 11.2Z"></path></svg></button><button class="wallet-btn"><svg viewBox="0 0 24 24"><path d="M4 7h14a2 2 0 0 1 2 2v9H6a2 2 0 0 1-2-2V7Zm0 0V5a2 2 0 0 1 2-2h10v4m1 5h3"></path><circle cx="16.5" cy="12" r="1"></circle></svg>Connect wallet</button></div></div>
     </div>
     <div class="mobile-menu-scrim" id="mobile-menu-scrim"></div>
 
@@ -45,32 +48,29 @@
             <div class="eyebrow"><span>● LIVE ON ARC</span> BUILT FOR ARGUS LAUNCHES</div>
             <h1>See the wallets<br />behind every <em>launch.</em></h1>
             <p>ArcEye turns creator history, bundled supply and fee movements into evidence you can verify before you trade.</p>
-            <div class="hero-actions"><button class="primary-btn" data-scroll="launches">Explore live launches</button><button class="secondary-btn" data-view="scan">Inspect an address <span>↗</span></button></div>
-            <div class="hero-proof"><span><strong>184</strong> launches indexed today</span><span><strong>27</strong> creators flagged</span><span><strong>0.48s</strong> Arc finality</span></div>
+            <div class="hero-actions"><button class="primary-btn" data-view="launches">Explore live launches</button><button class="secondary-btn" data-view="scan">Inspect an address <span>↗</span></button></div>
+            <div class="hero-proof"><span><strong>4,086</strong> tokens indexed</span><span><strong>2,184</strong> active in 24H</span><span><strong>0.48s</strong> Arc finality</span></div>
           </div>
-          <div class="hero-product" aria-label="Example creator intelligence result">
-            <div class="hero-product-top"><div><span class="product-status">CREATOR INTELLIGENCE</span><small>Updated 8s ago</small></div><span class="score-chip">87 · HIGH RISK</span></div>
-            <div class="hero-creator"><img src="assets/tokens/ghost.svg" alt="Ghost Protocol token" /><div><strong>Ghost Protocol</strong><span>0x71F2…A19C</span></div><em>31.2% bundled</em></div>
-            <div class="hero-signal"><i class="danger-mark"></i><div><strong>7 of 8 previous launches collapsed</strong><span>More than 95% below peak market cap</span></div><b>STRONG</b></div>
-            <div class="hero-signal"><i></i><div><strong>12 wallets share one funder</strong><span>10 entered during the launch block</span></div><b>STRONG</b></div>
-            <div class="hero-signal"><i class="fee-mark"></i><div><strong>Creator fees moved to a fresh wallet</strong><span>$4,210 transferred 11m before a new launch</span></div><b>VERIFIED</b></div>
-            <div class="hero-product-foot"><span>Evidence, not accusations.</span><button data-view="network">Open wallet map →</button></div>
+          <div class="hero-map-card" aria-label="Live Arc token bubble map">
+            <div class="hero-map-head"><div><span class="product-status">LIVE TOKEN MAP</span><small>2,184 tokens with 24H activity</small></div><div class="mini-time-controls"><button class="active">24H</button><button>7D</button><button>30D</button></div></div>
+            <div class="hero-bubble-field" id="hero-bubble-field"></div>
+            <div class="hero-map-foot"><span><i class="map-gain"></i>Gain</span><span><i class="map-loss"></i>Loss</span><button data-view="bubble-map">Open full map →</button></div>
           </div>
         </div>
 
         <div class="stat-strip">
-          <div><span>24H LAUNCHES</span><strong>184</strong><small class="up">+31.4%</small></div>
-          <div><span>FLAGGED CREATORS</span><strong>27</strong><small>14.6% of launches</small></div>
-          <div><span>CREATOR FEES TRACKED</span><strong>$418.2K</strong><small class="up">+$82K today</small></div>
+          <div><span>TOKENS INDEXED</span><strong>4,086</strong><small class="up">+486 this week</small></div>
+          <div><span>ACTIVE IN 24H</span><strong>2,184</strong><small>53.4% of indexed tokens</small></div>
+          <div><span>FLAGGED CREATORS</span><strong>312</strong><small class="up">28 new signals today</small></div>
           <div><span>ARC FINALITY</span><strong>0.48s</strong><small class="live">● LIVE</small></div>
         </div>
 
         <div class="section-intro" id="launches"><div><span class="kicker">LAUNCH MONITOR</span><h2>Fresh tokens. Creator context included.</h2></div><p>Every read is tied back to an on-chain signal.</p></div>
         <div class="toolbar">
           <div class="tabs" role="tablist">
-            <button class="tab active" data-filter="all">All launches <span>184</span></button>
-            <button class="tab" data-filter="new">New <span>42</span></button>
-            <button class="tab" data-filter="flagged">Flagged <span>27</span></button>
+            <button class="tab active" data-filter="all">Active <span>2,184</span></button>
+            <button class="tab" data-filter="new">New <span>486</span></button>
+            <button class="tab" data-filter="flagged">Flagged <span>312</span></button>
             <button class="tab" data-filter="watching">Watching <span>4</span></button>
           </div>
           <div class="table-tools">
@@ -86,28 +86,18 @@
               <tbody id="launch-rows"></tbody>
             </table>
           </div>
-          <div class="table-foot"><span><i></i> Streaming blocks from Arc mainnet</span><button>View all 184 launches →</button></div>
+          <div class="table-foot"><span><i></i> Streaming activity from 2,184 Arc tokens</span><button data-view="launches">View all 4,086 launches →</button></div>
         </div>
 
         <section class="bubble-section" aria-labelledby="bubble-heading">
           <div class="bubble-head"><div><span class="kicker">MARKET PULSE</span><h2 id="bubble-heading">Arc launch map</h2><p>Bubble size reflects market cap. Colour reflects price movement.</p></div><div class="bubble-controls"><button class="active">24H</button><button>7D</button><button>30D</button><button>1Y</button></div></div>
-          <div class="bubble-map" id="bubble-map">
-            <button class="market-bubble gain size-xl b1" data-token="ARCX"><img src="assets/tokens/arcx.svg" alt="" /><strong>ARCX</strong><span>+316%</span><small>$592K</small></button>
-            <button class="market-bubble gain size-lg b2" data-token="VOLT"><img src="assets/tokens/volt.svg" alt="" /><strong>VOLT</strong><span>+182%</span><small>$84.2K</small></button>
-            <button class="market-bubble gain size-lg b3" data-token="GHOST"><img src="assets/tokens/ghost.svg" alt="" /><strong>GHOST</strong><span>+74.8%</span><small>$211K</small></button>
-            <button class="market-bubble loss size-md b4" data-token="NOVA"><img src="assets/tokens/nova.svg" alt="" /><strong>NOVA</strong><span>−31.9%</span><small>$73.1K</small></button>
-            <button class="market-bubble gain size-md b5" data-token="MINT"><img src="assets/tokens/mint.svg" alt="" /><strong>MINT</strong><span>+8.2%</span><small>$128K</small></button>
-            <button class="market-bubble loss size-sm b6" data-token="KERN"><img src="assets/tokens/kern.svg" alt="" /><strong>KERN</strong><span>−12.4%</span></button>
-            <button class="market-bubble gain size-xs b7" data-token="VOLT"><img src="assets/tokens/volt.svg" alt="" /><strong>ZAP</strong><span>+6.4%</span></button>
-            <button class="market-bubble loss size-xs b8" data-token="GHOST"><img src="assets/tokens/ghost.svg" alt="" /><strong>FOLD</strong><span>−18.3%</span></button>
-            <button class="market-bubble neutral size-xs b9" data-token="ARCX"><img src="assets/tokens/arcx.svg" alt="" /><strong>WAVE</strong><span>+0.8%</span></button>
-            <div class="map-note"><span>27</span> flagged creator clusters visible</div>
-          </div>
+          <div class="bubble-map dense-map" id="home-bubble-field"></div>
+          <div class="bubble-section-foot"><span><i class="map-gain"></i>Positive</span><span><i class="map-loss"></i>Negative</span><span><i class="map-neutral"></i>Flat</span><button data-view="bubble-map">Explore full bubble map →</button></div>
         </section>
 
         <div class="lower-grid">
           <article class="panel fee-panel">
-            <div class="panel-head"><div><span class="kicker">CREATOR FEE RADAR</span><h2>Repeat fee farmers</h2></div><button>View all →</button></div>
+            <div class="panel-head"><div><span class="kicker">CREATOR FEE RADAR</span><h2>Repeat fee farmers</h2></div><button data-view="farmer">View creator records →</button></div>
             <div id="farmer-list"></div>
           </article>
           <article class="panel activity-panel">
@@ -115,6 +105,26 @@
             <div id="activity-list"></div>
           </article>
         </div>
+      </section>
+
+      <section class="view" id="launches-view">
+        <div class="directory-head"><div><span class="kicker">ARC TOKEN DIRECTORY</span><h1>Every launch.<br />One intelligence layer.</h1><p>Browse 4,086 indexed tokens, then open the creator, bundle and wallet evidence behind any launch.</p></div><div class="directory-stat"><strong>4,086</strong><span>INDEXED TOKENS</span><small>2,184 active in the last 24 hours</small></div></div>
+        <div class="directory-controls"><label class="directory-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="directory-search" placeholder="Search token, symbol, creator or contract address" /></label><select aria-label="Sort launches"><option>Most recent</option><option>Highest market cap</option><option>Highest activity</option><option>Highest risk</option></select><button class="filter-btn">Advanced filters <span>3</span></button></div>
+        <div class="directory-meta"><div><button class="active">All <span>4,086</span></button><button>Active 24H <span>2,184</span></button><button>New <span>486</span></button><button>Flagged <span>312</span></button></div><span>Showing 24 representative records</span></div>
+        <div class="data-shell directory-table"><div class="table-scroll"><table class="launch-table"><thead><tr><th>Token</th><th>Age</th><th>Market cap</th><th>24H</th><th>Liquidity</th><th>Creator record</th><th>Bundle</th><th>ArcEye read</th><th></th></tr></thead><tbody id="all-launch-rows"></tbody></table></div><div class="pagination"><button disabled>← Previous</button><span>Page 1 of 171</span><button>Next →</button></div></div>
+      </section>
+
+      <section class="view" id="bubble-map-view">
+        <div class="map-page-head"><div><span class="kicker">LIVE MARKET VISUALIZATION</span><h1>Arc Bubble Map</h1><p>Market cap controls size. Price performance controls colour. Select any bubble to open full token intelligence.</p></div><div class="map-page-stats"><span><strong>2,184</strong> active tokens</span><span><strong>$38.6M</strong> tracked volume</span></div></div>
+        <div class="map-toolbar"><div class="map-mode"><button class="active">Performance</button><button>Market cap</button><button>Creator risk</button></div><div class="bubble-controls map-time-controls"><button class="active">24H</button><button>7D</button><button>30D</button><button>1Y</button></div></div>
+        <div class="full-bubble-shell"><div class="full-bubble-map" id="full-bubble-field"></div><div class="large-trade-bar"><strong>LARGE TRADES</strong><span><i></i>&gt; $10K</span><span><i></i>&gt; $50K</span><span><i></i>&gt; $100K</span><span><i></i>&gt; $1M</span><button>View activity feed →</button></div></div>
+      </section>
+
+      <section class="view" id="farmer-view">
+        <div class="detail-breadcrumb"><button data-view="terminal">← Creator fee radar</button><span>/</span><span>Creator dossier</span></div>
+        <div class="farmer-profile"><div class="dossier-address"><i class="identicon profile-id"></i><div><span class="kicker">REPEAT CREATOR</span><h1 id="farmer-wallet">0x71F2…A19C</h1><p>12 launches · 10 inactive · $41,820 creator fees collected</p></div></div><div class="farmer-risk"><strong>91</strong><span>HIGH RISK<small>8 verified signals</small></span></div></div>
+        <div class="farmer-summary"><div><span>TOKENS CREATED</span><strong>12</strong><small>Across 19 days</small></div><div><span>DOWN &gt;95%</span><strong class="danger-text">10</strong><small>83.3% failure rate</small></div><div><span>FEES COLLECTED</span><strong>$41,820</strong><small>4 destination wallets</small></div><div><span>LINKED CREATORS</span><strong>4</strong><small>Shared funders detected</small></div></div>
+        <div class="panel farmer-token-panel"><div class="panel-head"><div><span class="kicker">TOKENS LAUNCHED BY THIS WALLET</span><h2>Complete creator history</h2></div><button data-view="network">Open wallet network →</button></div><div id="farmer-token-list" class="farmer-token-list"></div></div>
       </section>
 
       <section class="view" id="token-view">
@@ -148,7 +158,7 @@
       </section>
 
       <section class="view" id="scan-view">
-        <div class="section-heading"><div><span class="kicker">ARCEYE SCAN</span><h1>Follow the money,<br />not the profile.</h1><p>Search any token, wallet, transaction or block on Arc.</p></div></div>
+        <div class="section-heading scan-heading"><div><span class="kicker">ARCEYE SCAN</span><h1>Look up anything<br />on Arc.</h1><p>Paste a token contract, wallet address, transaction hash or block number. ArcEye will identify it and show the relevant on-chain context.</p></div><div class="scan-types"><div><strong>Token</strong><span>Price, creator, bundle and holders</span></div><div><strong>Wallet</strong><span>Balances, launches and relationships</span></div><div><strong>Transaction</strong><span>Asset flow and counterparties</span></div><div><strong>Block</strong><span>Transactions and validator details</span></div></div></div>
         <div class="hero-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="scan-input" placeholder="Search address / tx hash / token / block" /><button id="scan-button">Inspect</button></div>
         <div class="scan-grid">
           <article class="panel wide-panel">
@@ -165,6 +175,7 @@
 
       <section class="view" id="network-view">
         <div class="section-heading compact"><div><span class="kicker">WALLET RELATIONSHIPS</span><h1>Creator network</h1><p>Evidence-backed links across launch wallets, funders and fee withdrawals.</p></div><div class="legend"><span><i class="safe-dot"></i> Creator</span><span><i class="warn-dot"></i> Linked</span><span><i class="bad-dot"></i> Flagged</span></div></div>
+        <div class="network-explainer"><img src="assets/tokens/ghost.svg" alt="Ghost Protocol token" /><div><span class="kicker">YOU ARE VIEWING</span><strong>Ghost Protocol creator cluster</strong><p>The centre wallet created GHOST. Lines show direct funding, fee transfers or coordinated buying. Click a wallet to inspect why ArcEye linked it.</p></div><div class="explain-metrics"><span><strong>7</strong> wallets</span><span><strong>14</strong> verified links</span><span><strong>31.2%</strong> controlled supply</span></div></div>
         <div class="network-layout">
           <article class="panel graph-panel">
             <div class="graph-toolbar"><button class="active">Money flow</button><button>Launch lineage</button><button>Shared buyers</button><span>7 wallets · 14 links</span></div>
@@ -191,12 +202,12 @@
       </section>
 
       <section class="view" id="watchlist-view">
-        <div class="empty-state"><span class="empty-eye"></span><span class="kicker">WATCHLIST</span><h1>Your highest-conviction signals,<br />without the noise.</h1><p>Four monitored creators are ready. Connect your wallet to sync alerts across devices.</p><button class="primary-btn">Connect wallet</button></div>
+        <div class="empty-state"><img class="watchlist-logo" src="assets/arceye-logo.png" alt="ArcEye" /><span class="kicker">WATCHLIST</span><h1>Your highest-conviction signals,<br />without the noise.</h1><p>Four monitored creators are ready. Connect your wallet to sync alerts across devices.</p><button class="primary-btn">Connect wallet</button></div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <div class="footer-main"><div class="footer-brand"><a class="brand" href="#" data-view="terminal"><img src="assets/arceye-logo.png" alt="" /><span>ArcEye</span></a><p>On-chain creator intelligence for tokens launched across the Arc ecosystem.</p><div class="footer-status"><span></span>Indexing Arc mainnet</div></div><div class="footer-links"><div><strong>Product</strong><button data-view="terminal">Terminal</button><button data-view="scan">ArcEye Scan</button><button data-view="network">Creator network</button><button data-view="watchlist">Watchlist</button></div><div><strong>Resources</strong><a href="https://argus.world/" target="_blank" rel="noreferrer">Argus launchpad ↗</a><a href="https://explorer.arc.io/" target="_blank" rel="noreferrer">Arc explorer ↗</a><a href="https://github.com/deficrawler-dev/arceye" target="_blank" rel="noreferrer">GitHub ↗</a></div><div><strong>Methodology</strong><a href="#">Risk signals</a><a href="#">Bundle detection</a><a href="#">Creator attribution</a></div></div></div>
+      <div class="footer-main"><div class="footer-brand"><a class="brand" href="#" data-view="terminal"><img src="assets/arceye-logo.png" alt="" /><span>ArcEye</span></a><p>On-chain creator intelligence for tokens launched across the Arc ecosystem.</p><div class="footer-status"><span></span>Indexing Arc mainnet</div></div><div class="footer-links"><div><strong>Product</strong><button data-view="terminal">Terminal</button><button data-view="launches">All launches</button><button data-view="bubble-map">Bubble Map</button><button data-view="scan">ArcEye Scan</button><button data-view="network">Creator network</button></div><div><strong>Resources</strong><a href="https://argus.world/" target="_blank" rel="noreferrer">Argus launchpad ↗</a><a href="https://explorer.arc.io/" target="_blank" rel="noreferrer">Arc explorer ↗</a><a href="https://github.com/deficrawler-dev/arceye" target="_blank" rel="noreferrer">GitHub ↗</a></div><div><strong>Methodology</strong><a href="#">Risk signals</a><a href="#">Bundle detection</a><a href="#">Creator attribution</a></div></div></div>
       <div class="footer-bottom"><span>© 2026 ArcEye. Built independently for the Arc ecosystem.</span><span>Evidence, not accusations.</span></div>
     </footer>
 
